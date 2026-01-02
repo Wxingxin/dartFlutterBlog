@@ -1,0 +1,7 @@
+[
+            {"type": "file", "name": "index", "label": "home"},
+            {"type": "file", "name": "button", "label": "BUTTON"},
+            {"type": "file", "name": "fromInput", "label": "FROM & INPUT"},
+            {"type": "file", "name": ".", "label": ""}
+
+]
