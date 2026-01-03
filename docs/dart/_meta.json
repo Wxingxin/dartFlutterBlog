@@ -19,8 +19,8 @@
   },
   {
     "type": "dir",
-    "name": "class",
-    "label": "class",
+    "name": "oop",
+    "label": "oop",
     "collapse": true,
     "collapsed": true
   }
