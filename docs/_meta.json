@@ -1,14 +1,23 @@
 [
-  
   {
     "text": "DART",
     "link": "/dart/",
     "activeMatch": "/dart/"
   },
   {
-    "text":"FLUTTER",
+    "text": "FLUTTER",
     "link": "/flutter/",
     "activeMatch": "/flutter/"
+  },
+  {
+    "text": "navigator",
+    "link": "/navigator/",
+    "activeMatch": "/navigator/"
+  },
+  {
+    "text": "APP",
+    "link": "/app/",
+    "activeMatch": "/app/"
   },
   {
     "text": "API",

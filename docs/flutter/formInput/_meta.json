@@ -1,0 +1,12 @@
+[
+        {"type": "file", "name": "./textField.md", "label": "textField"},
+        {"type": "file", "name": "./textFormField.md", "label": "textFormField"},
+        {"type": "file", "name": "./checkbox.md", "label": ""},
+        {"type": "file", "name": "./checkboxListTile.md", "label": ""},
+        {"type": "file", "name": "./radio.md", "label": ""},
+        {"type": "file", "name": "./radioListTile.md", "label": ""},
+        {"type": "file", "name": "./switch.md", "label": ""},
+        {"type": "file", "name": "./switchListTile.md", "label": ""},
+        {"type": "file", "name": ".", "label": ""}
+
+]

@@ -7,7 +7,7 @@
     "collapsed": true
   },
   { "type": "file", "name": "var", "label": "var" },
-  { "type": "dir", "name": "secode", "label": "second" },
+  { "type": "dir", "name": "base", "label": "BASE" },
   { "type": "file", "name": "operators", "label": "operators" },
   { "type": "file", "name": "statement", "label": "statement" },
   {

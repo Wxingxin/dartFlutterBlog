@@ -1,7 +1,88 @@
 [
-            {"type": "file", "name": "index", "label": "home"},
-            {"type": "file", "name": "button", "label": "BUTTON"},
-            {"type": "file", "name": "fromInput", "label": "FROM & INPUT"},
-            {"type": "file", "name": ".", "label": ""}
-
+  {
+    "type": "file",
+    "name": "index",
+    "label": "INDEX"
+  },{
+    "type": "file",
+    "name": "state",
+    "label": "STATE"
+  },
+  {
+    "type": "dir",
+    "name": "button",
+    "label": "BUTTON",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "formInput",
+    "label": "FORM & INPUT",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "formInputPro",
+    "label": "FORM & INPUT PRO",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "layout",
+    "label": "LAYOUT",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "container",
+    "label": "Container & Decoration",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "navigation",
+    "label": "Navigation & Scaffold",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "listScroll",
+    "label": "List & Scroll",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "dialogOverlay",
+    "label": "Dialog & Overlay",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "feedbackState",
+    "label": "Feedback & State",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "media",
+    "label": "Media",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
+    "name": "cupertino",
+    "label": "Cupertino",
+    "collapse": true,
+    "collapsed": true
+  }
 ]
