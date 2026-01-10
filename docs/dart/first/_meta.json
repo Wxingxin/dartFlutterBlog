@@ -1,5 +1,5 @@
 [
-        {"type": "file", "name": "windart", "label": "windart"},
-        {"type": "file", "name": "macdart", "label": "macdart"},
-        {"type": "file", "name": "usedart", "label": "usedart"}
+  { "type": "file", "name": "windart", "label": "windart" },
+  { "type": "file", "name": "macdart", "label": "macdart" },
+  { "type": "file", "name": "usedart", "label": "DART CLI" }
 ]

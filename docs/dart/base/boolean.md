@@ -1,8 +1,6 @@
-下面是一份**📘 Dart 语言 Boolean（bool）知识点大全**，我按**基础 → 运算 → 判空 → 控制流 → Flutter / 面试坑**系统整理，和你之前学的 **Number / String / List / Map / Set** 完整闭环。
+## bool
 
----
-
-# 一、bool 是什么（核心概念）
+### bool 是什么
 
 在 Dart 中，**bool 只有两个值**：
 
@@ -13,13 +11,11 @@ bool ok = false;
 
 👉 特点：
 
-* 只有 `true / false`
-* **没有 0 / 1 的隐式转换**
-* 强类型（非常重要）
+- 只有 `true / false`
+- **没有 0 / 1 的隐式转换**
+- 强类型（非常重要）
 
----
-
-# 二、bool 的声明方式（必会）
+### bool 的声明方式
 
 ```dart
 bool isLogin = true;
@@ -33,43 +29,61 @@ if (1) {}      // ❌
 if ("true") {}// ❌
 ```
 
----
+## bool 的属性和方法
 
-# 三、bool 的来源（常见）
+### bool属性
 
-## 1️⃣ 比较表达式
+| 属性       | 干什么                      | 返回值  |
+| ---------- | --------------------------- | ------- |
+|hashcode|返回一个整数(常用于：Set、Map 的 key 比较)|number|
+|runtimeType|运行时类型调试、日志中偶尔使用|bool|
+
+
+### bool方法
+
+| 方法       | 干什么                      | 返回值  |
+| ---------- | --------------------------- | ------- |
+|tostring()|日志 拼接字符串 调试输出|String|
+|noSuchMethod()|几乎不会手动使用 主要用于反射、代理|？|
+
+```dart
+print(true.toString());   // "true"
+print(false.toString());  // "false"
+
+true.noSuchMethod(Invocation.method(#test, []));
+
+```
+
+
+## bool 的来源（常见）
+
+### 1️⃣ 比较表达式
 
 ```dart
 bool a = 3 > 2;        // true
 bool b = x == y;
 ```
 
----
-
-## 2️⃣ 方法返回值
+### 2️⃣ 方法返回值
 
 ```dart
 list.isEmpty;
 map.containsKey("id");
 ```
 
----
-
-## 3️⃣ 逻辑判断结果
+### 3️⃣ 逻辑判断结果
 
 ```dart
 bool valid = age >= 18 && isVip;
 ```
 
----
-
 # 四、逻辑运算符（必考）
 
-| 运算符  | 含义 |   |   |
-| ---- | -- | - | - |
-| `&&` | 与  |   |   |
-| `    |    | ` | 或 |
-| `!`  | 非  |   |   |
+| 运算符 | 含义 |     |     |
+| ------ | ---- | --- | --- |
+| `&&`   | 与   |     |     |
+| `      |      | `   | 或  |
+| `!`    | 非   |     |     |
 
 ```dart
 if (a && b) {}
@@ -77,18 +91,9 @@ if (a || b) {}
 if (!a) {}
 ```
 
----
 
-## 短路特性（面试点）
 
-```dart
-false && print("不会执行");
-true || print("不会执行");
-```
-
----
-
-# 五、bool 与比较运算符（基础）
+## 五、bool 与比较运算符（基础）
 
 ```dart
 ==  !=  >  <  >=  <=
@@ -262,29 +267,8 @@ Switch(
 bool isValid = formKey.currentState?.validate() ?? false;
 ```
 
----
 
-# 十二、bool 常见错误总结（面试必考）
-
-❌ 用 0 / 1 当 bool
-❌ 忽略 null safety
-❌ 复杂 if 嵌套不拆分
-❌ `== true` 滥用
-❌ 在 UI 中直接写复杂逻辑
-
----
 
 # 十三、一句话记忆版
 
 > **Dart 的 bool = 强类型 + 只认 true / false + null 安全优先**
-
----
-
-## 接下来我可以继续帮你👇
-
-* ✅ **Dart 运算符大全（逻辑 / 位运算）**
-* ✅ **bool + 表单校验完整实战**
-* ✅ **Flutter 状态控制最佳实践**
-* ✅ **Dart 基础面试题汇总**
-
-你直接说下一步学哪个，我就接着给你整理 👍
