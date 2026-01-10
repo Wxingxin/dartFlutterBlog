@@ -1,5 +1,437 @@
+## Map 属性-方法-遍历
 
-# 一、Map 是什么（核心概念）
+### Map 的属性
+
+| 属性                  | 干什么           | 返回值                   |
+| --------------------- | ---------------- | ------------------------ |
+| length                | 键值对数量       | int                      |
+| isEmpty               | 是否为空         | bool                     |
+| isNotEmpty            | 是否非空         | bool                     |
+| keys                  | 所有 key         | Iterable<K>              |
+| values                | 所有 value       | Iterable<V>              |
+| entries               | key + value 组合 | Iterable<MapEntry<K, V>> |
+| hashCode （Object）   | 哈希值           | int                      |
+| runtimeType（Object） | 运行时类型       | Type                     |
+
+#### 1️⃣ `length`
+
+```dart
+Map<String, int> map = {'a': 1, 'b': 2};
+print(map.length); // 2
+```
+
+知识点
+
+- 表示 **键值对数量**
+- key 唯一，重复 key 会覆盖
+
+使用场景
+
+```dart
+if (map.length > 0) {}
+```
+
+⚠️ 推荐用下面的 👇
+
+#### 2️⃣ `isEmpty`
+
+```dart
+map.isEmpty;
+```
+
+知识点
+
+- 等价于 `map.length == 0`
+- 语义更清晰
+
+推荐写法
+
+```dart
+if (map.isEmpty) {
+  showEmpty();
+}
+```
+
+#### 3️⃣ `isNotEmpty`
+
+```dart
+map.isNotEmpty;
+```
+
+知识点
+
+- 等价于 `!map.isEmpty`
+- Flutter / 业务代码中非常常见
+
+```dart
+if (data.isNotEmpty) {
+  buildUI(data);
+}
+```
+
+#### 4️⃣ `keys`
+
+```dart
+map.keys;
+```
+
+类型
+
+```dart
+Iterable<K>
+```
+
+常见误区（⚠️）
+
+❌ 错误 1：把 keys / values 当 List 用
+
+```dart
+map.keys[0]; // ❌
+```
+
+✅ 正确：
+
+```dart
+map.keys.toList()[0];
+```
+
+知识点（⚠️ 重点）
+
+- **不是 List**
+- 是 Map 的实时视图（Map 变，它也变）
+
+```dart
+for (var k in map.keys) {
+  print(k);
+}
+```
+
+如需 List：
+
+```dart
+map.keys.toList();
+```
+
+❌ 错误 2：遍历 Map 用 keys + map[key]
+
+```dart
+for (var k in map.keys) {
+  print(map[k]);
+}
+```
+
+❌ 可读性差
+✅ 推荐：
+
+```dart
+for (var e in map.entries) {
+  print(e.value);
+}
+```
+
+#### 5️⃣ `values`
+
+```dart
+map.values;
+```
+
+知识点
+
+- 返回所有 value
+- 顺序与 keys 对应
+
+```dart
+for (var v in map.values) {
+  print(v);
+}
+```
+
+#### 6️⃣ `entries`（🔥 非常重要）
+
+```dart
+map.entries;
+```
+
+类型
+
+```dart
+Iterable<MapEntry<K, V>>
+```
+
+知识点
+
+- **同时拿 key 和 value**
+- Map 遍历的最佳方式
+
+```dart
+for (var entry in map.entries) {
+  print('${entry.key} -> ${entry.value}');
+}
+```
+
+👉 **强烈推荐用它遍历 Map**
+
+### Map 的方法
+
+| 分类 | 方法                           |
+| ---- | ------------------------------ |
+| 增   | `putIfAbsent` `addAll`         |
+| 改   | `update` `updateAll`           |
+| 删   | `remove` `removeWhere` `clear` |
+| 查   | `containsKey` `containsValue`  |
+| 取   | `[]` `[]=`                     |
+| 遍历 | `forEach`                      |
+| 转换 | `map` `cast`                   |
+| 安全 | `putIfAbsent` `update(orElse)` |
+
+#### 1️⃣ `[]` 取值
+
+```dart
+var map = {'a': 1, 'b': 2};
+
+print(map['a']); // 1
+print(map['c']); // null
+```
+
+知识点
+
+- key 不存在 → 返回 `null`
+- **不会抛异常**
+
+#### 2️⃣ `[]=` 赋值 / 覆盖
+
+```dart
+map['c'] = 3;
+map['a'] = 10; // 覆盖
+```
+
+- key 存在：覆盖
+- key 不存在：新增
+
+#### 3️⃣ `putIfAbsent`（🔥 非常重要）
+
+```dart
+map.putIfAbsent('a', () => 100);
+```
+
+知识点
+
+- **只有 key 不存在才会插入**
+- 回调是 **懒执行**
+
+使用场景（缓存 / 分组）
+
+```dart
+groups.putIfAbsent(key, () => []).add(value);
+```
+
+👉 **这是 Dart 分组的标准写法**
+
+#### 4️⃣ `addAll`
+
+```dart
+map.addAll({'c': 3, 'd': 4});
+```
+
+- 合并 Map
+- 重复 key 会被覆盖
+
+#### 5️⃣ `update`
+
+```dart
+map.update('a', (v) => v + 1);
+```
+
+⚠️ key 不存在会抛异常
+
+安全写法（必背）
+
+```dart
+map.update(
+  'c',
+  (v) => v + 1,
+  ifAbsent: () => 1,
+);
+```
+
+#### 6️⃣ `updateAll`
+
+```dart
+map.updateAll((key, value) => value * 2);
+```
+
+- 批量修改 value
+- key 不变
+
+#### 7️⃣ `remove`
+
+```dart
+map.remove('a');
+```
+
+- 删除指定 key
+- 返回被删除的 value（或 null）
+
+#### 8️⃣ `removeWhere`（🔥）
+
+```dart
+map.removeWhere((key, value) => value < 0);
+```
+
+- 条件删除
+- **安全删除方式**
+
+#### 9️⃣ `clear`
+
+```dart
+map.clear();
+```
+
+- 清空 Map
+
+#### 🔟 `containsKey`
+
+```dart
+map.containsKey('a');
+```
+
+👉 **判断 key 是否存在（最常用）**
+
+#### 1️⃣1️⃣ `containsValue`
+
+```dart
+map.containsValue(2);
+```
+
+- 判断 value
+- 性能比 `containsKey` 差（要遍历）
+
+#### 1️⃣2️⃣ `forEach`
+
+```dart
+map.forEach((key, value) {
+  print('$key -> $value');
+});
+```
+
+知识点
+
+- ❌ 不能 `break / continue`
+- ❌ 遍历时不能修改 Map 结构
+
+👉 **推荐：`entries` + for-in（你之前学的）**
+
+### Map 的遍历
+
+| 遍历方法                   | 能拿到      | 能否 break |
+| -------------------------- | ----------- | ---------- |
+| for (var k in map.keys)    | key         | ✅         |
+| for (var v in map.values)  | value       | ✅         |
+| for (var e in map.entries) | key + value | ✅         |
+| while + iterator           | key + value | ✅         |
+| map.forEach((k,v))         | key + value | ❌         |
+| map.entries.map(...)       | key + value | ❌         |
+| map.entries.where(...)     | key + value | ❌         |
+
+
+#### `entries + for-in`（强烈推荐）
+
+```dart
+for (final entry in map.entries) {
+  print('${entry.key} -> ${entry.value}');
+}
+```
+
+ 知识点
+
+* 同时拿 **key + value**
+* 支持 `break / continue`
+* 可读性最好、性能也很好
+
+👉 **95% 的业务遍历就用它**
+
+
+#### 1️⃣ 遍历 `keys`
+
+```dart
+for (final k in map.keys) {
+  print(k);
+}
+```
+
+* 只关心 key
+* `keys` 是 `Iterable`（不是 List）
+
+
+
+#### 2️⃣ 遍历 `values`
+
+```dart
+for (final v in map.values) {
+  print(v);
+}
+```
+
+* 只关心 value
+* 顺序与插入顺序一致
+
+#### `while + iterator`（了解即可）
+
+```dart
+final it = map.entries.iterator;
+while (it.moveNext()) {
+  final e = it.current;
+  print('${e.key} -> ${e.value}');
+}
+```
+
+* 最底层方式
+* 几乎不用（for-in 更清晰）
+
+
+#### `forEach`（⚠️ 易被滥用）
+
+```dart
+map.forEach((key, value) {
+  print('$key -> $value');
+});
+```
+
+ 必知要点
+
+* ❌ **不能 `break / continue`**
+* ❌ 遍历时 **不能修改 Map 结构**
+* 有回调闭包开销（通常不大）
+
+ 适合场景
+
+```dart
+map.forEach(print); // 纯打印
+```
+
+
+#### 1️⃣ `entries.map`（遍历 + 转换）
+
+```dart
+final list = map.entries.map((e) {
+  return '${e.key}:${e.value}';
+}).toList();
+```
+
+* 返回 `Iterable`
+* **需要 `toList()` 才落地**
+
+
+
+#### 2️⃣ `entries.where`（遍历 + 过滤）
+
+```dart
+final filtered = map.entries
+    .where((e) => e.value > 10)
+    .toList();
+```
+
+## Map 是什么（核心概念）
 
 在 Dart 中，**Map 是键值对（key-value）集合**：
 
@@ -12,11 +444,11 @@ Map<String, int> scores = {
 
 👉 特点：
 
-* key **唯一**
-* value 可重复
-* 通过 key 查 value
-* **无序**（不要依赖插入顺序）
-* 强泛型
+- key **唯一**
+- value 可重复
+- 通过 key 查 value
+- **无序**（不要依赖插入顺序）
+- 强泛型
 
 ---
 
@@ -77,131 +509,9 @@ map['b'] = 2; // ❌
 
 👉 规则和 List 一样：
 
-* `final`：引用不可变
-* `const`：内容不可变
+- `final`：引用不可变
+- `const`：内容不可变
 
----
-
-# 三、Map 常用属性（基础）
-
-```dart
-map.length
-map.isEmpty
-map.isNotEmpty
-map.keys      // Iterable<K>
-map.values    // Iterable<V>
-map.entries   // Iterable<MapEntry<K, V>>
-```
-
----
-
-# 四、Map 的增删改查（核心）
-
-## ➕ 增 / 改（同一个操作）
-
-```dart
-map['a'] = 1;     // 新增
-map['a'] = 100;   // 修改
-```
-
----
-
-## 🔍 查
-
-```dart
-map['a'];                 // 不存在返回 null
-map.containsKey('a');
-map.containsValue(100);
-```
-
-⚠️ null 安全注意：
-
-```dart
-int? value = map['x'];
-```
-
----
-
-## ➖ 删
-
-```dart
-map.remove('a');
-map.clear();
-```
-
----
-
-# 五、Map 遍历方式（必会）
-
-## 1️⃣ forEach（最常用）
-
-```dart
-map.forEach((key, value) {
-  print('$key : $value');
-});
-```
-
----
-
-## 2️⃣ entries（推荐）
-
-```dart
-for (var entry in map.entries) {
-  print('${entry.key} : ${entry.value}');
-}
-```
-
----
-
-## 3️⃣ 遍历 keys / values
-
-```dart
-for (var key in map.keys) {}
-for (var value in map.values) {}
-```
-
----
-
-# 六、Map 高阶方法（🔥 Dart 核心）
-
-## 1️⃣ map（注意⚠️ 和 List 的 map 不一样）
-
-```dart
-var newMap = map.map((key, value) {
-  return MapEntry(key, value * 2);
-});
-```
-
----
-
-## 2️⃣ where（过滤）
-
-```dart
-var filtered = map.entries
-    .where((e) => e.value > 80)
-    .map((e) => MapEntry(e.key, e.value));
-```
-
----
-
-## 3️⃣ putIfAbsent（很常用）
-
-```dart
-map.putIfAbsent('a', () => 100);
-```
-
-👉 **key 不存在才执行**
-
----
-
-## 4️⃣ update（推荐）
-
-```dart
-map.update('a', (v) => v + 1);
-map.update('b', (v) => 1, ifAbsent: () => 1);
-```
-
----
 
 # 七、Map 拷贝（⚠️ Flutter 大坑）
 
@@ -281,70 +591,8 @@ Map<String, int?>? map;     // 都可为 null
 
 # 十、Map vs List vs Set（对比）
 
-| 类型   | 有序 | key 唯一 | value 唯一 |
-| ---- | -- | ------ | -------- |
-| List | ✅  | ❌      | ❌        |
-| Set  | ❌  | ❌      | ✅        |
-| Map  | ❌  | ✅      | ❌        |
-
----
-
-# 十一、Flutter 中 Map 的典型场景
-
-## 1️⃣ 表单数据
-
-```dart
-Map<String, dynamic> formData = {
-  'username': '',
-  'password': '',
-};
-```
-
----
-
-## 2️⃣ 网络请求参数
-
-```dart
-dio.post('/login', data: {
-  'username': 'admin',
-  'password': '123456',
-});
-```
-
----
-
-## 3️⃣ List<Map>（非常常见）
-
-```dart
-List<Map<String, dynamic>> users = [
-  {'name': 'Tom', 'age': 18},
-  {'name': 'Jack', 'age': 20},
-];
-```
-
----
-
-# 十二、Map 常见错误总结（面试必考）
-
-❌ `var map = {};`
-❌ 忘记 null 判断：`map['x']!`
-❌ Map 拷贝引用问题
-❌ Map.map 返回的是 Map，不是 List
-❌ JSON 不做类型转换
-
----
-
-# 十三、一句话记忆版
-
-> **Dart 的 Map = 强泛型 key-value 容器 + JSON 的核心载体**
-
----
-
-## 接下来我可以帮你继续👇
-
-* ✅ **List<Map> ↔ Model 完整实战**
-* ✅ **Flutter 中 Map + 表单 + 网络**
-* ✅ **Map 常见面试题（附 Dart / JS 对照）**
-* ✅ **json_serializable 自动生成 Map**
-
-你直接说：**“继续 Map + JSON 实战”** 或 **“Flutter 场景”** 就行 👍
+| 类型 | 有序 | key 唯一 | value 唯一 |
+| ---- | ---- | -------- | ---------- |
+| List | ✅   | ❌       | ❌         |
+| Set  | ❌   | ❌       | ✅         |
+| Map  | ❌   | ✅       | ❌         |

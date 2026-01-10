@@ -1,0 +1,15 @@
+[
+  { "type": "file", "name": "null", "label": "null 特殊值类型" },
+  { "type": "file", "name": "dynamic", "label": "dynamic 特殊值类型" },
+  { "type": "file", "name": "object", "label": "object 特殊值类型" },
+  { "type": "file", "name": "never", "label": "never 特殊值类型" },
+  { "type": "file", "name": "record", "label": "record Dart3" },
+  { "type": "file", "name": "type", "label": "type 类型系统" },
+  { "type": "file", "name": "symbol", "label": "symbol 类型系统" },
+  { "type": "file", "name": "enum", "label": "enum 类型系统" },
+  {
+    "type": "file",
+    "name": "extensionType",
+    "label": "extensionType 类型系统"
+  }
+]

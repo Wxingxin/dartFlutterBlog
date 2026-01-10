@@ -5,6 +5,5 @@
   { "type": "file", "name": "list", "label": "list" },
   { "type": "file", "name": "map", "label": "map" },
   { "type": "file", "name": "set", "label": "set" },
-  { "type": "file", "name": "runnes", "label": "runnes" },
-  { "type": "file", "name": "symbol", "label": "symbol" }
+  { "type": "file", "name": "runnes", "label": "runnes" }
 ]

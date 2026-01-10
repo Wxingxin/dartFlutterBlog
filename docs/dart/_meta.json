@@ -1,26 +1,33 @@
 [
   {
     "type": "dir",
-    "name": "first",
-    "label": "install",
+    "name": "installUse",
+    "label": "INSTALL & CLI",
     "collapse": true,
     "collapsed": true
   },
-  { "type": "file", "name": "var", "label": "var" },
-  { "type": "dir", "name": "base", "label": "BASE" },
+  { "type": "file", "name": "var", "label": "VAR" },
+  { "type": "dir", "name": "base", "label": "DATA TYPE" },
+  {
+    "type": "dir",
+    "name": "basepro",
+    "label": "DATA TYPE PRO",
+    "collapse": true,
+    "collapsed": true
+  },
   { "type": "file", "name": "operators", "label": "operators" },
   { "type": "file", "name": "statement", "label": "statement" },
   {
     "type": "dir",
     "name": "fun",
-    "label": "fun",
+    "label": "FUNCTION",
     "collapse": true,
     "collapsed": true
   },
   {
     "type": "dir",
     "name": "oop",
-    "label": "oop",
+    "label": "OOP",
     "collapse": true,
     "collapsed": true
   }
