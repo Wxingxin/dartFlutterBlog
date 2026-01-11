@@ -10,13 +10,24 @@
     "activeMatch": "/flutter/"
   },
   {
+    "text": "state",
+    "link": "/state/",
+    "activeMatch": "/state/"
+  },
+  {
     "text": "navigator",
     "link": "/navigator/",
     "activeMatch": "/navigator/"
   },
-  
   {
-    "text": "API",
-    "link": "https://rspress.dev/api/index.html"
+    "text": "riverpod",
+    "link": "/riverpod/",
+    "activeMatch": "/riverpod/"
+  },
+  {
+    "text": "APP",
+    "link": "/app/",
+    "activeMatch": "/app/"
+
   }
 ]

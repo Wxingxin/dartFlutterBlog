@@ -3,10 +3,16 @@
     "type": "file",
     "name": "index",
     "label": "INDEX"
-  },{
+  },
+  {
     "type": "file",
     "name": "state",
     "label": "STATE"
+  },
+  {
+    "type": "file",
+    "name": "cli",
+    "label": "CLI"
   },
   {
     "type": "dir",
