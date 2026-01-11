@@ -9,11 +9,7 @@
   { "type": "file", "name": "./mixins.md", "label": "混入" },
   { "type": "file", "name": "./polymorphism.md", "label": "多态" },
   { "type": "file", "name": "./generics.md", "label": "泛型" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" },
-  { "type": "file", "name": ".", "label": "" }
+  { "type": "file", "name": "./operatorOverloading.md", "label": "操作符重载" },
+  { "type": "file", "name": "./designPatterns.md", "label": "设计模式" }
+
 ]

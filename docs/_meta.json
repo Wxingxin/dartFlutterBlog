@@ -14,11 +14,7 @@
     "link": "/navigator/",
     "activeMatch": "/navigator/"
   },
-  {
-    "text": "APP",
-    "link": "/app/",
-    "activeMatch": "/app/"
-  },
+  
   {
     "text": "API",
     "link": "https://rspress.dev/api/index.html"
