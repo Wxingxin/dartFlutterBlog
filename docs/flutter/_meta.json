@@ -10,11 +10,6 @@
     "label": "STATE"
   },
   {
-    "type": "file",
-    "name": "cli",
-    "label": "CLI"
-  },
-  {
     "type": "dir",
     "name": "button",
     "label": "BUTTON",

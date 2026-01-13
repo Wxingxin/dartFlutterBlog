@@ -31,20 +31,19 @@ if ("true") {}// ❌
 
 ## bool 的属性和方法
 
-### bool属性
+### bool 属性
 
-| 属性       | 干什么                      | 返回值  |
-| ---------- | --------------------------- | ------- |
-|hashcode|返回一个整数(常用于：Set、Map 的 key 比较)|number|
-|runtimeType|运行时类型调试、日志中偶尔使用|bool|
+| 属性                | 干什么                                     | 返回值 |
+| ------------------- | ------------------------------------------ | ------ |
+| hashcode(Object)    | 返回一个整数(常用于：Set、Map 的 key 比较) | number |
+| runtimeType(Object) | 运行时类型调试、日志中偶尔使用             | bool   |
 
+### bool 方法
 
-### bool方法
-
-| 方法       | 干什么                      | 返回值  |
-| ---------- | --------------------------- | ------- |
-|tostring()|日志 拼接字符串 调试输出|String|
-|noSuchMethod()|几乎不会手动使用 主要用于反射、代理|？|
+| 方法           | 干什么                              | 返回值 |
+| -------------- | ----------------------------------- | ------ |
+| tostring()     | 日志 拼接字符串 调试输出            | String |
+| noSuchMethod() | 几乎不会手动使用 主要用于反射、代理 | ？     |
 
 ```dart
 print(true.toString());   // "true"
@@ -53,7 +52,6 @@ print(false.toString());  // "false"
 true.noSuchMethod(Invocation.method(#test, []));
 
 ```
-
 
 ## bool 的来源（常见）
 
@@ -90,8 +88,6 @@ if (a && b) {}
 if (a || b) {}
 if (!a) {}
 ```
-
-
 
 ## 五、bool 与比较运算符（基础）
 
@@ -266,8 +262,6 @@ Switch(
 ```dart
 bool isValid = formKey.currentState?.validate() ?? false;
 ```
-
-
 
 # 十三、一句话记忆版
 

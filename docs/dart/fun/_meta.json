@@ -3,5 +3,8 @@
   { "type": "file", "name": "future", "label": "Future" },
   { "type": "file", "name": "streamIsolate", "label": "Stream & Isolate" },
   { "type": "file", "name": "generics", "label": "泛型" },
-  { "type": "file", "name": "pro", "label": "高级特性" }
+  { "type": "file", "name": "pro", "label": "高级特性" },
+  { "type": "file", "name": "./stream.md", "label": "stream" },
+  { "type": "file", "name": "./isolate.md", "label": "isolate" }
+
 ]

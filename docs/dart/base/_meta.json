@@ -1,9 +1,8 @@
 [
   { "type": "file", "name": "number", "label": "number" },
   { "type": "file", "name": "string", "label": "string" },
-  { "type": "file", "name": "boolean", "label": "boolean" },
+  { "type": "file", "name": "bool", "label": "bool" },
   { "type": "file", "name": "list", "label": "list" },
   { "type": "file", "name": "map", "label": "map" },
-  { "type": "file", "name": "set", "label": "set" },
-  { "type": "file", "name": "runnes", "label": "runnes" }
+  { "type": "file", "name": "set", "label": "set" }
 ]
