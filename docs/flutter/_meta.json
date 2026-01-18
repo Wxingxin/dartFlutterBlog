@@ -11,36 +11,36 @@
   },
   {
     "type": "dir",
+    "name": "show",
+    "label": "SHOW 展示",
+    "collapse": true,
+    "collapsed": true
+  },
+  {
+    "type": "dir",
     "name": "button",
-    "label": "BUTTON",
+    "label": "BUTTON 按钮",
     "collapse": true,
     "collapsed": true
   },
   {
     "type": "dir",
     "name": "formInput",
-    "label": "FORM & INPUT",
-    "collapse": true,
-    "collapsed": true
-  },
-  {
-    "type": "dir",
-    "name": "formInputPro",
-    "label": "FORM & INPUT PRO",
+    "label": "FORM 表单",
     "collapse": true,
     "collapsed": true
   },
   {
     "type": "dir",
     "name": "layout",
-    "label": "LAYOUT",
+    "label": "LAYOUT 布局",
     "collapse": true,
     "collapsed": true
   },
   {
     "type": "dir",
     "name": "container",
-    "label": "Container & Decoration",
+    "label": "Container 容器",
     "collapse": true,
     "collapsed": true
   },
@@ -54,7 +54,7 @@
   {
     "type": "dir",
     "name": "listScroll",
-    "label": "List & Scroll",
+    "label": "List 列表",
     "collapse": true,
     "collapsed": true
   },
