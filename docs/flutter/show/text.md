@@ -293,3 +293,280 @@ Text('次要信息', style: AppText.muted);
 ---
 
 如果你愿意，我可以基于你现在的 UI 风格（你之前偏简约风）给你整理一套“可直接落地的 Typography 规范（title/body/caption/mono）+ 一个完整示例页面（列表、详情、按钮、表单）”，让 Text 的用法在你项目里形成统一标准。
+-------------------------------
+下面给你一份 **Flutter 中 `Text` 组件的属性与配置大全**，按**真实项目使用频率 + 可维护性**系统整理，适合作为长期查阅文档。
+
+---
+
+## 一、Text 最基础用法（认知入口）
+
+```dart
+Text(
+  'Hello Flutter',
+)
+```
+
+---
+
+## 二、Text 核心属性大全（⭐⭐⭐⭐⭐）
+
+### 1️⃣ 文本内容与样式（最核心）
+
+| 属性                | 类型               | 说明     |
+| ----------------- | ---------------- | ------ |
+| `style`           | `TextStyle?`     | 文本样式集合 |
+| `textAlign`       | `TextAlign?`     | 对齐方式   |
+| `textDirection`   | `TextDirection?` | 文本方向   |
+| `softWrap`        | `bool?`          | 是否自动换行 |
+| `overflow`        | `TextOverflow?`  | 溢出处理   |
+| `maxLines`        | `int?`           | 最大行数   |
+| `textScaleFactor` | `double?`        | 文本缩放比例 |
+| `semanticsLabel`  | `String?`        | 无障碍描述  |
+
+---
+
+### 2️⃣ TextStyle 详细属性大全（重点中的重点）
+
+```dart
+TextStyle(
+  color: Colors.black,
+  fontSize: 16,
+)
+```
+
+| 分类   | 属性                | 说明      |
+| ---- | ----------------- | ------- |
+| 颜色   | `color`           | 字体颜色    |
+| 字号   | `fontSize`        | 字体大小    |
+| 字重   | `fontWeight`      | 字体粗细    |
+| 字体   | `fontFamily`      | 字体名称    |
+| 样式   | `fontStyle`       | 斜体      |
+| 间距   | `letterSpacing`   | 字符间距    |
+| 间距   | `wordSpacing`     | 单词间距    |
+| 行高   | `height`          | 行高倍数    |
+| 装饰   | `decoration`      | 下划线/删除线 |
+| 装饰色  | `decorationColor` | 装饰颜色    |
+| 装饰样式 | `decorationStyle` | 虚线/实线   |
+| 阴影   | `shadows`         | 文字阴影    |
+| 背景   | `background`      | 背景画刷    |
+
+#### 字重常用值
+
+```dart
+FontWeight.w400 // 常规
+FontWeight.w500 // 中等
+FontWeight.w600 // 半粗
+FontWeight.bold
+```
+
+---
+
+### 3️⃣ 溢出 & 行数控制（列表必用）
+
+```dart
+Text(
+  '超长文本',
+  maxLines: 2,
+  overflow: TextOverflow.ellipsis,
+)
+```
+
+| TextOverflow | 效果     |
+| ------------ | ------ |
+| `ellipsis`   | 省略号    |
+| `clip`       | 裁剪     |
+| `fade`       | 渐隐     |
+| `visible`    | 可见（慎用） |
+
+---
+
+### 4️⃣ 对齐方式
+
+```dart
+textAlign: TextAlign.center
+```
+
+| 值         | 说明   |
+| --------- | ---- |
+| `left`    | 左对齐  |
+| `right`   | 右对齐  |
+| `center`  | 居中   |
+| `justify` | 两端对齐 |
+
+---
+
+## 三、富文本（TextSpan / RichText）
+
+### 1️⃣ Text.rich（推荐）
+
+```dart
+Text.rich(
+  TextSpan(
+    text: '价格：',
+    children: [
+      TextSpan(
+        text: '¥99',
+        style: TextStyle(color: Colors.red),
+      ),
+    ],
+  ),
+)
+```
+
+📌 **优点**：继承 Text 的属性、易维护
+
+---
+
+### 2️⃣ RichText（更底层）
+
+```dart
+RichText(
+  text: TextSpan(
+    text: 'Hello ',
+    style: TextStyle(color: Colors.black),
+    children: [
+      TextSpan(
+        text: 'Flutter',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+    ],
+  ),
+)
+```
+
+---
+
+## 四、文本方向 & 国际化相关
+
+```dart
+Text(
+  'مرحبا',
+  textDirection: TextDirection.rtl,
+)
+```
+
+| 属性              | 说明        |
+| --------------- | --------- |
+| `textDirection` | RTL / LTR |
+| `locale`        | 语言区域      |
+
+---
+
+## 五、无障碍（Accessibility）
+
+```dart
+Text(
+  '关闭',
+  semanticsLabel: '关闭按钮',
+)
+```
+
+📌 屏幕阅读器会读 `semanticsLabel`
+
+---
+
+## 六、Text 与系统缩放（重要）
+
+### ❗ 默认 Text 会随系统字体缩放
+
+```dart
+textScaleFactor: 1.0 // 固定
+```
+
+📌 **列表 / UI 密集区域**常设置为 `1.0`
+
+---
+
+## 七、常见实战场景
+
+### 1️⃣ 单行标题
+
+```dart
+Text(
+  title,
+  maxLines: 1,
+  overflow: TextOverflow.ellipsis,
+  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+)
+```
+
+---
+
+### 2️⃣ 多行正文
+
+```dart
+Text(
+  content,
+  style: TextStyle(height: 1.6),
+)
+```
+
+---
+
+### 3️⃣ 标签 / Badge
+
+```dart
+Container(
+  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  child: Text(
+    'NEW',
+    style: TextStyle(fontSize: 12, color: Colors.white),
+  ),
+)
+```
+
+---
+
+### 4️⃣ 点击文本（链接）
+
+```dart
+GestureDetector(
+  onTap: () {},
+  child: Text(
+    '点击查看',
+    style: TextStyle(color: Colors.blue),
+  ),
+)
+```
+
+---
+
+## 八、Text 常见坑总结（经验）
+
+| 问题     | 原因                 |
+| ------ | ------------------ |
+| 文本不换行  | 父容器宽度无限            |
+| 行高异常   | `height` 设置不合理     |
+| 富文本不生效 | style 未继承          |
+| 字体无效   | 未配置 `pubspec.yaml` |
+
+---
+
+## 九、Text 的“最佳实践”（项目级）
+
+### ✅ 封装统一样式
+
+```dart
+class AppTextStyle {
+  static const title = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+  static const body = TextStyle(fontSize: 14);
+}
+```
+
+```dart
+Text('标题', style: AppTextStyle.title)
+```
+
+---
+
+## 十、你可以继续深入的方向（建议）
+
+如果你愿意，我可以继续帮你：
+
+1. **TextStyle 体系设计（类似 Material Theme）**
+2. **多语言 + RTL 实战**
+3. **自定义字体全流程**
+4. **Flutter 排版原理（行高、baseline）**
+5. **封装类似 RN 的 Text 组件**
+
+你只需要选一个方向，我直接给你完整方案。
