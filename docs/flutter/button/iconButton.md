@@ -332,3 +332,340 @@ InkWell(
 3️⃣ **Flutter UI 面试高频 30 题（含 IconButton）**
 
 选一个，我直接继续展开 🚀
+-------------------------------
+下面给你一份 **Flutter `IconButton` 组件的属性与配置大全**。
+我会按 **「是什么 → 构造函数 → 样式 / 行为 → 状态 → 主题 → 实战场景」** 的顺序讲，风格与你前面看的 `TextButton / OutlinedButton / ElevatedButton` **保持一致**，方便你形成完整按钮体系。
+
+---
+
+# 一、IconButton 是什么
+
+`IconButton` 是 **只包含图标的按钮组件**：
+
+* 没有文字（也可以“看起来像没文字”）
+* 点击区域可配置
+* 默认 **无背景 / 无边框**
+* 常用于 **AppBar、工具栏、列表操作**
+
+📌 官方定位：
+
+> **IconButton 用于图标触发的轻量级操作**
+
+---
+
+# 二、最基础用法
+
+```dart
+IconButton(
+  icon: const Icon(Icons.favorite),
+  onPressed: () {
+    print('点击了图标按钮');
+  },
+)
+```
+
+⚠️ `onPressed == null` → 禁用状态（自动变灰）
+
+---
+
+# 三、构造函数与核心属性
+
+```dart
+IconButton({
+  Key? key,
+  required Widget icon,
+  double? iconSize,
+  VisualDensity? visualDensity,
+  EdgeInsetsGeometry padding = const EdgeInsets.all(8.0),
+  AlignmentGeometry alignment = Alignment.center,
+  double? splashRadius,
+  Color? color,
+  Color? disabledColor,
+  String? tooltip,
+  VoidCallback? onPressed,
+  FocusNode? focusNode,
+  bool autofocus = false,
+  bool enableFeedback = true,
+  MouseCursor? mouseCursor,
+})
+```
+
+---
+
+# 四、核心行为属性
+
+---
+
+## 1️⃣ onPressed（点击）
+
+```dart
+onPressed: () {}
+```
+
+```dart
+onPressed: isDisabled ? null : handleClick;
+```
+
+📌 禁用态会自动使用 `disabledColor`
+
+---
+
+## 2️⃣ tooltip（强烈推荐）
+
+```dart
+tooltip: '收藏'
+```
+
+📌 效果：
+
+* **Web / Desktop**：鼠标悬浮提示
+* **Mobile**：长按提示
+* **无障碍（Accessibility）必备**
+
+---
+
+## 3️⃣ autofocus / focusNode
+
+```dart
+autofocus: true,
+focusNode: myFocusNode,
+```
+
+用于 **键盘导航 / TV / Web**
+
+---
+
+## 4️⃣ enableFeedback（触觉 / 声音反馈）
+
+```dart
+enableFeedback: true
+```
+
+📌 Android 上会有震动反馈
+
+---
+
+# 五、样式与外观配置
+
+---
+
+## 1️⃣ icon（图标内容）
+
+```dart
+icon: const Icon(Icons.delete),
+```
+
+📌 可以是 **任何 Widget**
+
+```dart
+icon: Image.asset('assets/icon.png'),
+```
+
+---
+
+## 2️⃣ iconSize（图标大小）
+
+```dart
+iconSize: 24
+```
+
+📌 默认：`24`
+
+---
+
+## 3️⃣ color（图标颜色）
+
+```dart
+color: Colors.blue
+```
+
+📌 实际作用于 `Icon`，不是按钮本身
+
+---
+
+## 4️⃣ disabledColor（禁用颜色）
+
+```dart
+disabledColor: Colors.grey
+```
+
+---
+
+## 5️⃣ padding（点击区域）
+
+```dart
+padding: const EdgeInsets.all(12)
+```
+
+📌 **重要 UX 点**：
+即使图标很小，点击区域也要 ≥ 48×48
+
+---
+
+## 6️⃣ alignment（图标对齐）
+
+```dart
+alignment: Alignment.center
+```
+
+---
+
+## 7️⃣ splashRadius（水波纹范围）
+
+```dart
+splashRadius: 24
+```
+
+📌 控制点击时水波纹的大小
+
+---
+
+## 8️⃣ visualDensity（紧凑程度）
+
+```dart
+visualDensity: VisualDensity.compact
+```
+
+| 值           | 场景      |
+| ----------- | ------- |
+| standard    | 默认      |
+| compact     | 列表 / 表格 |
+| comfortable | 桌面端     |
+
+---
+
+## 9️⃣ mouseCursor（鼠标样式）
+
+```dart
+mouseCursor: SystemMouseCursors.click
+```
+
+📌 Web / Desktop 推荐配置
+
+---
+
+# 六、状态与交互说明
+
+IconButton **没有 ButtonStyle / MaterialStateProperty**，
+而是通过 **颜色 + 水波纹** 来表达状态。
+
+| 状态       | 表现            |
+| -------- | ------------- |
+| pressed  | 水波纹           |
+| disabled | disabledColor |
+| hover    | 水波纹 + tooltip |
+| focus    | 高亮边框（可选）      |
+
+---
+
+# 七、AppBar 中的 IconButton（最常见）
+
+```dart
+AppBar(
+  title: const Text('详情页'),
+  actions: [
+    IconButton(
+      icon: const Icon(Icons.share),
+      tooltip: '分享',
+      onPressed: () {},
+    ),
+    IconButton(
+      icon: const Icon(Icons.more_vert),
+      tooltip: '更多',
+      onPressed: () {},
+    ),
+  ],
+)
+```
+
+---
+
+# 八、Theme 级统一配置（进阶）
+
+`IconButton` 没有单独的 `IconButtonTheme`（旧版有，已弱化），
+推荐通过 **IconTheme** 统一控制：
+
+```dart
+ThemeData(
+  iconTheme: const IconThemeData(
+    color: Colors.blue,
+    size: 24,
+  ),
+)
+```
+
+---
+
+# 九、IconButton vs Icon + GestureDetector
+
+❌ 不推荐：
+
+```dart
+GestureDetector(
+  onTap: () {},
+  child: Icon(Icons.delete),
+)
+```
+
+✅ 推荐：
+
+```dart
+IconButton(
+  icon: const Icon(Icons.delete),
+  onPressed: () {},
+)
+```
+
+原因：
+
+| 对比点     | IconButton | GestureDetector |
+| ------- | ---------- | --------------- |
+| 水波纹     | ✅          | ❌               |
+| 无障碍     | ✅          | ❌               |
+| tooltip | ✅          | ❌               |
+| UX 规范   | ✅          | ❌               |
+
+---
+
+# 十、常见使用场景
+
+| 场景         | 是否推荐 |
+| ---------- | ---- |
+| AppBar 操作  | ✅    |
+| 列表 item 操作 | ✅    |
+| 工具栏        | ✅    |
+| 表单提交       | ❌    |
+| 主要 CTA     | ❌    |
+
+---
+
+# 十一、与其他按钮的关系
+
+| 按钮                   | 用途     |
+| -------------------- | ------ |
+| ElevatedButton       | 主操作    |
+| OutlinedButton       | 次操作    |
+| TextButton           | 辅助操作   |
+| **IconButton**       | 图标操作   |
+| FloatingActionButton | 全局核心操作 |
+
+---
+
+# 十二、实战最佳实践（重要）
+
+✅ **一定要加 tooltip**
+✅ **保证点击区域 ≥ 48×48**
+✅ AppBar / 列表操作优先使用
+❌ 不要用来当主按钮
+
+---
+
+## 如果你愿意，我可以继续帮你：
+
+* `FloatingActionButton` 全解析
+* IconButton + Badge（未读数）
+* 自封装 `AppIconButton`
+* Material 3 下的 IconButton 新变化
+* Flutter 按钮组件一张完整对照表
+
+你直接说下一步想看哪一个即可。

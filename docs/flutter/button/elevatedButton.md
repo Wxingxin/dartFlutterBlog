@@ -245,3 +245,406 @@ Row(
 
 这个可以帮你学会 `setState`、`ButtonStyle`、和 `Future` 的结合，非常实用 🔥。
 要我帮你写这个进阶版吗？
+-----------------------
+下面我给你一份**Flutter `ElevatedButton` 组件属性与配置的系统化大全**，按「**基础 → 样式 → 状态 → 主题 → 高级用法**」来讲，偏**工程实战视角**，方便你直接在项目中用。
+
+---
+
+# 一、ElevatedButton 是什么
+
+`ElevatedButton` 是 **Material 风格的主要按钮**，特点：
+
+* 有 **背景色**
+* 有 **阴影（elevation）**
+* 有 **点击反馈**
+* 用于 **核心 / 主要操作**
+
+📌 官方推荐：
+
+> **新项目优先使用 `ElevatedButton`，而不是旧的 `RaisedButton`（已废弃）**
+
+---
+
+# 二、最基础用法
+
+```dart
+ElevatedButton(
+  onPressed: () {
+    print('点击了按钮');
+  },
+  child: const Text('提交'),
+)
+```
+
+⚠️ 只要 `onPressed == null`，按钮就是 **禁用状态**
+
+---
+
+# 三、核心属性总览（构造函数）
+
+```dart
+ElevatedButton({
+  Key? key,
+  required VoidCallback? onPressed,
+  VoidCallback? onLongPress,
+  ButtonStyle? style,
+  FocusNode? focusNode,
+  bool autofocus = false,
+  Clip clipBehavior = Clip.none,
+  Widget? child,
+})
+```
+
+---
+
+# 四、功能类属性（行为控制）
+
+## 1️⃣ onPressed（必会）
+
+```dart
+onPressed: () {}
+```
+
+| 状态     | 效果       |
+| ------ | -------- |
+| 非 null | 按钮可点击    |
+| null   | 按钮禁用（灰色） |
+
+```dart
+onPressed: isLoading ? null : submit;
+```
+
+---
+
+## 2️⃣ onLongPress（长按）
+
+```dart
+onLongPress: () {
+  print('长按');
+}
+```
+
+---
+
+## 3️⃣ autofocus（自动获取焦点）
+
+```dart
+autofocus: true
+```
+
+📌 常用于 **键盘 / TV / Web 场景**
+
+---
+
+## 4️⃣ focusNode（焦点控制）
+
+```dart
+focusNode: myFocusNode
+```
+
+用于表单或键盘导航控制。
+
+---
+
+## 5️⃣ clipBehavior（裁剪行为）
+
+```dart
+clipBehavior: Clip.hardEdge
+```
+
+| 值              | 说明     |
+| -------------- | ------ |
+| Clip.none      | 默认，不裁剪 |
+| Clip.hardEdge  | 裁剪溢出   |
+| Clip.antiAlias | 抗锯齿    |
+
+---
+
+# 五、样式配置（重点）
+
+所有样式都通过 **`style: ButtonStyle`** 控制。
+
+---
+
+## ButtonStyle 常用属性总览
+
+```dart
+style: ButtonStyle(
+  backgroundColor,
+  foregroundColor,
+  overlayColor,
+  elevation,
+  shadowColor,
+  padding,
+  minimumSize,
+  fixedSize,
+  maximumSize,
+  shape,
+  side,
+  alignment,
+  textStyle,
+)
+```
+
+---
+
+## 1️⃣ backgroundColor（背景色）
+
+```dart
+backgroundColor: MaterialStateProperty.all(Colors.blue)
+```
+
+### 状态控制（推荐）
+
+```dart
+backgroundColor: MaterialStateProperty.resolveWith((states) {
+  if (states.contains(MaterialState.disabled)) {
+    return Colors.grey;
+  }
+  return Colors.blue;
+})
+```
+
+---
+
+## 2️⃣ foregroundColor（文字 / 图标颜色）
+
+```dart
+foregroundColor: MaterialStateProperty.all(Colors.white)
+```
+
+---
+
+## 3️⃣ overlayColor（点击水波纹）
+
+```dart
+overlayColor: MaterialStateProperty.all(
+  Colors.white.withOpacity(0.2),
+)
+```
+
+📌 控制点击、长按时的高亮效果
+
+---
+
+## 4️⃣ elevation（阴影高度）
+
+```dart
+elevation: MaterialStateProperty.all(6)
+```
+
+状态变化：
+
+```dart
+elevation: MaterialStateProperty.resolveWith((states) {
+  if (states.contains(MaterialState.pressed)) return 2;
+  return 6;
+})
+```
+
+---
+
+## 5️⃣ shadowColor（阴影颜色）
+
+```dart
+shadowColor: MaterialStateProperty.all(Colors.black)
+```
+
+---
+
+## 6️⃣ padding（内边距）
+
+```dart
+padding: MaterialStateProperty.all(
+  const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+)
+```
+
+---
+
+## 7️⃣ size 相关（3 选 1）
+
+### minimumSize（最小尺寸）
+
+```dart
+minimumSize: MaterialStateProperty.all(const Size(120, 48))
+```
+
+### fixedSize（固定尺寸）
+
+```dart
+fixedSize: MaterialStateProperty.all(const Size(200, 50))
+```
+
+### maximumSize（最大尺寸）
+
+```dart
+maximumSize: MaterialStateProperty.all(const Size(300, 60))
+```
+
+---
+
+## 8️⃣ shape（形状 / 圆角）
+
+```dart
+shape: MaterialStateProperty.all(
+  RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+)
+```
+
+### 圆形按钮
+
+```dart
+shape: MaterialStateProperty.all(
+  const CircleBorder(),
+)
+```
+
+---
+
+## 9️⃣ side（边框）
+
+```dart
+side: MaterialStateProperty.all(
+  const BorderSide(color: Colors.red, width: 2),
+)
+```
+
+📌 可做成 **“带边框的 ElevatedButton”**
+
+---
+
+## 🔟 textStyle（文字样式）
+
+```dart
+textStyle: MaterialStateProperty.all(
+  const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+)
+```
+
+---
+
+## 1️⃣1️⃣ alignment（内容对齐）
+
+```dart
+alignment: Alignment.centerLeft
+```
+
+---
+
+# 六、状态枚举（MaterialState）
+
+```dart
+MaterialState.pressed
+MaterialState.hovered
+MaterialState.focused
+MaterialState.disabled
+MaterialState.selected
+```
+
+📌 `resolveWith` 就是用来 **针对状态做样式变化**
+
+---
+
+# 七、带图标的 ElevatedButton
+
+## 官方写法
+
+```dart
+ElevatedButton.icon(
+  onPressed: () {},
+  icon: const Icon(Icons.send),
+  label: const Text('发送'),
+)
+```
+
+---
+
+# 八、主题级配置（推荐）
+
+## 全局统一按钮风格
+
+```dart
+MaterialApp(
+  theme: ThemeData(
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    ),
+  ),
+)
+```
+
+📌 实际项目 **强烈建议用 Theme，而不是每个按钮单独写 style**
+
+---
+
+# 九、styleFrom（快速写法）
+
+```dart
+ElevatedButton(
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.green,
+    foregroundColor: Colors.white,
+    elevation: 4,
+    padding: const EdgeInsets.all(16),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+    ),
+  ),
+  onPressed: () {},
+  child: const Text('保存'),
+)
+```
+
+⚠️ `styleFrom` 是 **语法糖**，底层仍然是 `ButtonStyle`
+
+---
+
+# 十、常见使用场景总结
+
+| 场景      | 是否适合                             |
+| ------- | -------------------------------- |
+| 表单提交    | ✅ 非常适合                           |
+| 登录 / 注册 | ✅                                |
+| 主要 CTA  | ✅                                |
+| 次要操作    | ❌（用 TextButton / OutlinedButton） |
+| 工具栏按钮   | ❌                                |
+
+---
+
+# 十一、与其他按钮的关系
+
+| 按钮                   | 适合场景             |
+| -------------------- | ---------------- |
+| ElevatedButton       | **主操作**          |
+| FilledButton         | Material 3 推荐主按钮 |
+| OutlinedButton       | 次级操作             |
+| TextButton           | 最弱操作             |
+| IconButton           | 图标操作             |
+| FloatingActionButton | 全局核心操作           |
+
+---
+
+## 如果你愿意
+
+我可以帮你继续补充：
+
+* ✅ `ElevatedButton` **完整状态变化示例**
+* ✅ **登录 / 表单按钮最佳实践**
+* ✅ `ElevatedButton vs FilledButton`（Material 3）
+* ✅ 自封装一个 **BaseButton 组件**
+* ✅ Flutter 按钮组件 **学习优先级建议**
+
+你可以直接告诉我下一步想看哪一个。

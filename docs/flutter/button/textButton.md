@@ -290,3 +290,357 @@ Row(
 这个案例非常适合练习 `MaterialStateProperty` 和 `RichText` 的结合，
 而且在真实项目（比如 Flutter Web）中经常会用到。
 要我帮你写这个练习版吗？
+-------------------------------
+下面给你一份**Flutter `TextButton` 组件的属性与配置大全**，我会按**工程实战 + 易记忆结构**来讲，并且和你前面看的 `ElevatedButton / OutlinedButton` 保持一致，方便你形成**完整按钮体系认知**。
+
+---
+
+# 一、TextButton 是什么
+
+`TextButton` 是 **Material 风格中“最弱”的按钮**：
+
+* **无背景**
+* **无边框**
+* **只有文字（或图标）**
+* 点击时只有 **水波纹 / 颜色变化**
+
+📌 官方定位：
+
+```
+Elevated / FilledButton  → 主操作
+OutlinedButton           → 次操作
+TextButton               → 辅助操作
+```
+
+---
+
+# 二、最基础用法
+
+```dart
+TextButton(
+  onPressed: () {
+    print('点击 TextButton');
+  },
+  child: const Text('忘记密码？'),
+)
+```
+
+---
+
+# 三、构造函数与核心属性
+
+```dart
+TextButton({
+  Key? key,
+  required VoidCallback? onPressed,
+  VoidCallback? onLongPress,
+  ButtonStyle? style,
+  FocusNode? focusNode,
+  bool autofocus = false,
+  Clip clipBehavior = Clip.none,
+  Widget? child,
+})
+```
+
+⚠️ `onPressed == null` → **禁用状态**
+
+---
+
+# 四、行为相关属性
+
+## 1️⃣ onPressed（点击）
+
+```dart
+onPressed: () {}
+```
+
+```dart
+onPressed: isDisabled ? null : handleClick;
+```
+
+---
+
+## 2️⃣ onLongPress（长按）
+
+```dart
+onLongPress: () {}
+```
+
+---
+
+## 3️⃣ focusNode / autofocus
+
+```dart
+focusNode: myFocusNode,
+autofocus: true,
+```
+
+用于 **Web / 键盘 / TV 端**
+
+---
+
+## 4️⃣ clipBehavior
+
+```dart
+clipBehavior: Clip.hardEdge
+```
+
+---
+
+# 五、样式配置（ButtonStyle）
+
+所有样式都通过：
+
+```dart
+style: ButtonStyle(...)
+```
+
+---
+
+## ButtonStyle（TextButton 常用属性）
+
+```dart
+style: ButtonStyle(
+  foregroundColor,
+  overlayColor,
+  padding,
+  minimumSize,
+  fixedSize,
+  maximumSize,
+  shape,
+  alignment,
+  textStyle,
+)
+```
+
+⚠️ **TextButton 没有 backgroundColor / side**
+
+---
+
+# 六、核心样式属性详解
+
+---
+
+## 1️⃣ foregroundColor（文字 / 图标颜色）
+
+```dart
+foregroundColor: MaterialStateProperty.all(Colors.blue)
+```
+
+### 状态控制（推荐）
+
+```dart
+foregroundColor: MaterialStateProperty.resolveWith((states) {
+  if (states.contains(MaterialState.disabled)) {
+    return Colors.grey;
+  }
+  return Colors.blue;
+})
+```
+
+---
+
+## 2️⃣ overlayColor（水波纹 / 点击态）
+
+```dart
+overlayColor: MaterialStateProperty.all(
+  Colors.blue.withOpacity(0.1),
+)
+```
+
+📌 用于 hover / press / focus 状态
+
+---
+
+## 3️⃣ padding（点击区域）
+
+```dart
+padding: MaterialStateProperty.all(
+  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+)
+```
+
+📌 TextButton 常用于 **小点击目标**
+
+---
+
+## 4️⃣ size 控制（三选一）
+
+### minimumSize
+
+```dart
+minimumSize: MaterialStateProperty.all(const Size(48, 36))
+```
+
+### fixedSize
+
+```dart
+fixedSize: MaterialStateProperty.all(const Size(80, 36))
+```
+
+### maximumSize
+
+```dart
+maximumSize: MaterialStateProperty.all(const Size(200, 48))
+```
+
+---
+
+## 5️⃣ shape（点击区域形状）
+
+```dart
+shape: MaterialStateProperty.all(
+  RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(6),
+  ),
+)
+```
+
+📌 即使没边框，也会影响 **水波纹区域**
+
+---
+
+## 6️⃣ textStyle（文字样式）
+
+```dart
+textStyle: MaterialStateProperty.all(
+  const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+  ),
+)
+```
+
+---
+
+## 7️⃣ alignment（内容对齐）
+
+```dart
+alignment: Alignment.centerLeft
+```
+
+---
+
+# 七、状态枚举（MaterialState）
+
+```dart
+MaterialState.pressed
+MaterialState.hovered
+MaterialState.focused
+MaterialState.disabled
+MaterialState.selected
+```
+
+📌 在 TextButton 中主要控制：
+
+* 文字颜色
+* 水波纹颜色
+
+---
+
+# 八、带图标的 TextButton
+
+```dart
+TextButton.icon(
+  onPressed: () {},
+  icon: const Icon(Icons.help_outline),
+  label: const Text('帮助'),
+)
+```
+
+---
+
+# 九、Theme 级统一配置（强烈推荐）
+
+```dart
+MaterialApp(
+  theme: ThemeData(
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.blue,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        textStyle: const TextStyle(
+          fontSize: 14,
+        ),
+      ),
+    ),
+  ),
+)
+```
+
+📌 项目实践建议：
+
+> **所有 TextButton 都走 Theme，避免单独 style**
+
+---
+
+# 十、styleFrom（快速写法）
+
+```dart
+TextButton(
+  style: TextButton.styleFrom(
+    foregroundColor: Colors.red,
+    padding: const EdgeInsets.symmetric(horizontal: 12),
+  ),
+  onPressed: () {},
+  child: const Text('删除'),
+)
+```
+
+---
+
+# 十一、典型使用场景
+
+| 场景      | 是否适合 |
+| ------- | ---- |
+| 忘记密码    | ✅    |
+| 协议 / 链接 | ✅    |
+| 次级提示操作  | ✅    |
+| 表单提交    | ❌    |
+| 危险操作    | ❌    |
+
+---
+
+# 十二、三种按钮快速对比（记忆表）
+
+| 特性   | Elevated | Outlined | Text |
+| ---- | -------- | -------- | ---- |
+| 背景   | ✅        | ❌        | ❌    |
+| 边框   | ❌        | ✅        | ❌    |
+| 阴影   | ✅        | ❌        | ❌    |
+| 强度   | 高        | 中        | 低    |
+| 常用场景 | 提交       | 取消       | 链接   |
+
+---
+
+# 十三、学习与实践建议
+
+### 实战顺序（非常重要）
+
+1. **ElevatedButton**
+2. **OutlinedButton**
+3. **TextButton**
+4. IconButton / FAB
+
+### 项目中常见组合
+
+```dart
+Row(
+  children: [
+    OutlinedButton(onPressed: onCancel, child: Text('取消')),
+    const SizedBox(width: 12),
+    ElevatedButton(onPressed: onSubmit, child: Text('提交')),
+  ],
+)
+```
+
+---
+
+## 如果你愿意，我可以继续帮你：
+
+* 把 **三种按钮做成一张“配置对照表”**
+* Material 3 下的 `FilledButton` 全解析
+* 表单页按钮 **最佳 UX 规范**
+* 封装一个 `AppTextButton`
+
+你直接说下一步想看哪一个即可。
