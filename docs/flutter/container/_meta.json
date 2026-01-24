@@ -1,0 +1,32 @@
+[
+  { "type": "file", "name": "container", "label": "container 通用容器" },
+  { "type": "file", "name": "sizedBox", "label": "sizedBox 通用容器" },
+  {
+    "type": "file",
+    "name": "ConstrainedBox",
+    "label": "ConstrainedBox 通用容器"
+  },
+  {
+    "type": "file",
+    "name": "unconstrainedBox",
+    "label": "unconstrainedBox 通用容器"
+  },
+  {
+    "type": "file",
+    "name": "fractionallySizedBox",
+    "label": "fractionallySizedBox通用容器"
+  },
+  { "type": "file", "name": "aspectRatio", "label": "aspectRatio 通用容器" },
+  { "type": "file", "name": "Padding", "label": "Padding 间距/边距容器" },
+  {
+    "type": "file",
+    "name": "DecoratedBox",
+    "label": "DecoratedBox 装饰&外观容器"
+  },
+  { "type": "file", "name": "clipRRect", "label": "clipRRect 装饰&外观容器" },
+  { "type": "file", "name": "clipOval", "label": "clipOval 装饰&外观容器" },
+  { "type": "file", "name": "opacity", "label": "opacity 装饰&外观容器" },
+  { "type": "file", "name": "transform", "label": "transform装饰 & 外观容器" },
+  { "type": "file", "name": "intrinsicWidth", "label": "intrinsicWidth" },
+  { "type": "file", "name": "intrinsicHeight", "label": "intrinsicHeight" }
+]

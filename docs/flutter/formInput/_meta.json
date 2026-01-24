@@ -1,12 +1,17 @@
 [
-        {"type": "file", "name": "./textField.md", "label": "textField"},
-        {"type": "file", "name": "./textFormField.md", "label": "textFormField"},
-        {"type": "file", "name": "./checkbox.md", "label": ""},
-        {"type": "file", "name": "./checkboxListTile.md", "label": ""},
-        {"type": "file", "name": "./radio.md", "label": ""},
-        {"type": "file", "name": "./radioListTile.md", "label": ""},
-        {"type": "file", "name": "./switch.md", "label": ""},
-        {"type": "file", "name": "./switchListTile.md", "label": ""},
-        {"type": "file", "name": ".", "label": ""}
-
+  { "type": "file", "name": "index", "label": "index" },
+  { "type": "file", "name": "form", "label": "form" },
+  { "type": "file", "name": "textField", "label": "textField" },
+  { "type": "file", "name": "textFormField", "label": "textFormField" },
+  {
+    "type": "file",
+    "name": "dropdownButtonFormField",
+    "label": "dropdownButtonFormField"
+  },
+  { "type": "file", "name": "checkboxListTile", "label": "checkboxListTile" },
+  { "type": "file", "name": "radioListTile", "label": "radioListTile" },
+  { "type": "file", "name": "switchListTile", "label": "switchListTile" },
+  { "type": "file", "name": "checkbox", "label": "checkbox" },
+  { "type": "file", "name": "radio", "label": "radio" },
+  { "type": "file", "name": "switch", "label": "switch" }
 ]

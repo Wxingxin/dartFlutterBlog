@@ -273,3 +273,229 @@ Opacity(opacity: 1)
 * 🔥 **Flutter 常见性能陷阱组件清单（非常适合你这个阶段）**
 
 你更想继续 **性能原理**，还是 **动画实战**？
+----------------------------------------------
+下面是一份**Flutter 中 `Opacity` 组件的属性与配置大全**。我将按**定位 → 构造函数 → 核心属性 → 渲染机制 → 使用示例 → 对比 → 性能与注意事项 → 实战建议**的结构系统讲解，帮助你真正“用对”这个组件。
+
+---
+
+## 一、Opacity 是什么（定位）
+
+`Opacity` 用于**控制子组件的透明度**，取值范围 `0.0 ~ 1.0`。
+
+📌 重要特性：
+
+* 影响 **绘制（paint）阶段**
+* **不影响布局（layout）**
+* 会影响 **子树中所有组件**
+
+---
+
+## 二、Opacity 构造函数
+
+```dart
+Opacity({
+  Key? key,
+  required double opacity,
+  bool alwaysIncludeSemantics = false,
+  Widget? child,
+})
+```
+
+---
+
+## 三、属性详解
+
+---
+
+### 1️⃣ `opacity` ⭐⭐⭐（核心）
+
+```dart
+double opacity
+```
+
+| 值     | 效果        |
+| ----- | --------- |
+| `1.0` | 完全不透明     |
+| `0.5` | 半透明       |
+| `0.0` | 完全透明（仍占位） |
+
+示例：
+
+```dart
+Opacity(
+  opacity: 0.5,
+  child: Image.asset('logo.png'),
+)
+```
+
+⚠ 超出范围会被 assert
+
+---
+
+### 2️⃣ `child`
+
+```dart
+Widget? child
+```
+
+* 被设置透明度的子组件
+* 整个子树都会受影响
+
+---
+
+### 3️⃣ `alwaysIncludeSemantics`
+
+```dart
+bool alwaysIncludeSemantics = false
+```
+
+* 是否在透明度为 0 时仍保留无障碍语义
+
+| 场景      | 值           |
+| ------- | ----------- |
+| 透明即不可访问 | `false`（默认） |
+| 透明但可被读屏 | `true`      |
+
+---
+
+## 四、Opacity 的渲染原理（重要）
+
+### 🔍 RenderOpacity 行为
+
+* 当 `opacity == 1.0`
+
+  * 不额外创建图层（高效）
+* 当 `0.0 < opacity < 1.0`
+
+  * 创建 **离屏缓冲层（offscreen buffer）**
+  * 会带来 **性能开销**
+
+---
+
+## 五、Opacity vs Visibility vs Offstage
+
+| 组件                        | 可见 | 占位 | 参与点击 | 性能 |
+| ------------------------- | -- | -- | ---- | -- |
+| Opacity(0)                | ❌  | ✅  | ❌    | 中  |
+| Visibility(visible:false) | ❌  | ❌  | ❌    | 高  |
+| Offstage(offstage:true)   | ❌  | ❌  | ❌    | 高  |
+
+📌 如果只是“隐藏”，**不推荐用 Opacity**
+
+---
+
+## 六、Opacity vs AnimatedOpacity
+
+### `AnimatedOpacity`（推荐动画）
+
+```dart
+AnimatedOpacity(
+  opacity: isShow ? 1.0 : 0.0,
+  duration: Duration(milliseconds: 300),
+  child: Text("Hello"),
+)
+```
+
+* 自动插值
+* 内部优化动画帧
+
+---
+
+## 七、常见使用场景
+
+### ✅ 1. 禁用态 UI（视觉反馈）
+
+```dart
+Opacity(
+  opacity: isEnabled ? 1.0 : 0.4,
+  child: ElevatedButton(...),
+)
+```
+
+---
+
+### ✅ 2. 渐隐提示
+
+```dart
+AnimatedOpacity(
+  opacity: visible ? 1 : 0,
+  duration: Duration(milliseconds: 200),
+  child: Text("保存成功"),
+)
+```
+
+---
+
+### ✅ 3. 图片蒙层效果
+
+```dart
+Stack(
+  children: [
+    Image.network(url),
+    Opacity(
+      opacity: 0.3,
+      child: Container(color: Colors.black),
+    ),
+  ],
+)
+```
+
+---
+
+## 八、性能与最佳实践 ⭐⭐⭐
+
+### ❗ 1. 大面积使用有性能风险
+
+* 列表中大量 `Opacity(0.x)`
+* 动画频繁变化
+
+✔ 优化方案：
+
+* 优先 `AnimatedOpacity`
+* 能不用就不用
+
+---
+
+### ❗ 2. opacity = 0 ≠ 不存在
+
+* 仍占空间
+* 仍会 build
+* 不可点击
+
+---
+
+### ❗ 3. 点击区域问题
+
+* Opacity 不改变命中区域
+* 如需禁用点击，配合：
+
+```dart
+IgnorePointer(
+  ignoring: !isEnabled,
+  child: Opacity(...),
+)
+```
+
+---
+
+## 九、替代方案对照（非常实用）
+
+| 需求   | 推荐组件               |
+| ---- | ------------------ |
+| 动画透明 | AnimatedOpacity    |
+| 条件隐藏 | Visibility         |
+| 完全移除 | if / Offstage      |
+| 禁用交互 | IgnorePointer      |
+| 颜色透明 | Colors.withOpacity |
+
+---
+
+## 十、一句话总结
+
+> **Opacity 是一个“只改视觉、不改布局”的透明度控制组件，适合状态反馈和动画，但不适合做简单隐藏。**
+
+如果你愿意，我可以下一步帮你整理：
+
+* Flutter 中所有“隐藏组件”的完整对照表
+* 列表中使用 Opacity 的性能优化策略
+* Opacity + GestureDetector 的交互陷阱

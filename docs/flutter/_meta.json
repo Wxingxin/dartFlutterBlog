@@ -46,15 +46,15 @@
   },
   {
     "type": "dir",
-    "name": "navigation",
-    "label": "Navigation & Scaffold",
+    "name": "listScroll",
+    "label": "List 列表",
     "collapse": true,
     "collapsed": true
   },
   {
     "type": "dir",
-    "name": "listScroll",
-    "label": "List 列表",
+    "name": "navigation",
+    "label": "Navigation & Scaffold",
     "collapse": true,
     "collapsed": true
   },
