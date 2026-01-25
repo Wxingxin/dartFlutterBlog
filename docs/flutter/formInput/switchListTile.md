@@ -294,3 +294,192 @@ CupertinoSwitch(
 * ✅ **Flutter 表单类组件全家桶总结**
 
 你直接选一个，我继续给你往下拆 🚀
+--------------------------------------
+下面按 **Flutter 官方 `SwitchListTile` 构造函数源码顺序** 整理 **SwitchListTile 参数大全**，**不改结构**，并且 **每个参数后直接写中文注释**，方便你 **直接对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/material.dart`
+> * 本质：`ListTile + Switch` 的组合组件
+> * 顺序贴近官方构造函数
+> * 注释偏向「源码语义级理解」
+
+---
+
+## SwitchListTile 构造函数（源码结构 + 中文注释）
+
+```dart
+SwitchListTile({
+  Key? key, // widget 唯一标识，用于 widget 树 diff 和重建
+
+  required bool value, // 当前开关状态（true 开 / false 关）
+  required ValueChanged<bool>? onChanged, // 状态变化回调（为 null 时表示禁用）
+
+  Widget? title, // 主标题组件（通常是 Text）
+  Widget? subtitle, // 副标题组件
+
+  Widget? secondary, // 标题前或后的组件（Icon / Avatar 等）
+
+  bool isThreeLine = false, // 是否使用三行布局
+  bool dense = false, // 是否使用紧凑布局
+
+  bool? selected, // 是否处于选中高亮状态（影响文本颜色等）
+
+  ValueChanged<bool>? onFocusChange, // 焦点变化回调（获取 / 失去焦点）
+
+  Color? activeColor, // 开启状态下开关滑块颜色（Material 2）
+  Color? activeTrackColor, // 开启状态下轨道颜色
+  Color? inactiveThumbColor, // 关闭状态下滑块颜色
+  Color? inactiveTrackColor, // 关闭状态下轨道颜色
+
+  Color? tileColor, // ListTile 默认背景色
+  Color? selectedTileColor, // 选中状态下 ListTile 背景色
+
+  ShapeBorder? shape, // ListTile 形状（圆角、边框）
+
+  FocusNode? focusNode, // 焦点控制节点
+  bool autofocus = false, // 是否自动获取焦点
+
+  ListTileControlAffinity controlAffinity = ListTileControlAffinity.platform, 
+  // 开关相对于文本的位置（leading / trailing / platform）
+
+  EdgeInsetsGeometry? contentPadding, // ListTile 内边距
+
+  VisualDensity? visualDensity, // 视觉密度（整体紧凑程度）
+
+  MouseCursor? mouseCursor, // 鼠标悬停时光标样式（桌面端）
+
+  MaterialStateProperty<Color?>? thumbColor, // 滑块颜色（Material 3，按状态变化）
+  MaterialStateProperty<Color?>? trackColor, // 轨道颜色（Material 3，按状态变化）
+  MaterialStateProperty<Color?>? overlayColor, // 点击/悬停时覆盖颜色
+
+  bool? enableFeedback, // 是否启用触觉 / 声音反馈
+
+  Color? hoverColor, // 鼠标悬停背景色
+
+  Color? splashColor, // 点击水波纹颜色
+})
+```
+
+---
+
+## 核心参数源码级理解
+
+### 一、状态控制（最核心）
+
+```dart
+value
+onChanged
+```
+
+* `value`：当前开关状态
+* `onChanged = null` ⇒ 整个组件禁用
+
+---
+
+### 二、ListTile 布局相关
+
+```dart
+title
+subtitle
+secondary
+isThreeLine
+dense
+contentPadding
+```
+
+---
+
+### 三、Switch 视觉 & Material 版本差异
+
+```dart
+activeColor
+activeTrackColor
+inactiveThumbColor
+inactiveTrackColor
+thumbColor
+trackColor
+```
+
+* Material 2：主要使用 `activeColor` 等
+* Material 3：推荐使用 `thumbColor` / `trackColor`
+
+---
+
+### 四、交互 & 焦点
+
+```dart
+focusNode
+autofocus
+onFocusChange
+mouseCursor
+enableFeedback
+```
+
+---
+
+## 常见使用模板（源码对照理解）
+
+```dart
+SwitchListTile(
+  title: const Text('深色模式'),
+  value: isDarkMode,
+  onChanged: (value) {
+    setState(() {
+      isDarkMode = value;
+    });
+  },
+)
+```
+
+---
+
+## 和 Switch 的本质区别（一句话）
+
+> **SwitchListTile = Switch + ListTile**
+
+* Switch：只负责开关状态
+* SwitchListTile：负责 **状态 + 文本 + 点击区域 + 无障碍**
+
+---
+
+## 表单使用重要提醒（容易踩坑）
+
+> ⚠️ `SwitchListTile` **不是 FormField**
+
+* ❌ 不支持 `validator`
+* ❌ 不支持 `onSaved`
+* 表单中若需要校验：
+
+  * 使用 `FormField<bool>` 包一层
+  * 或自定义 `SwitchFormField`
+
+---
+
+## Checkbox / Radio / Switch ListTile 对照总结
+
+| 组件               | 用途 | 是否表单字段 |
+| ---------------- | -- | ------ |
+| CheckboxListTile | 多选 | ❌      |
+| RadioListTile    | 单选 | ❌      |
+| SwitchListTile   | 开关 | ❌      |
+
+---
+
+## 一句话总结（架构级）
+
+> **SwitchListTile 是“列表型布尔开关组件”**
+>
+> * 设置页
+> * 功能开关
+> * 偏好配置
+
+---
+
+如果你愿意，我可以继续按这个 **源码对照风格** 给你整理：
+
+* `FormField<T>` 参数大全（自定义表单必会）
+* `InputDecoration` 参数大全（Text / Dropdown 通用）
+* Flutter 表单组件体系完整图谱
+
+你直接说下一个即可。

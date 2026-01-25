@@ -388,3 +388,206 @@ Row(
 * 🔥 帮你整理成 **Rspress / Markdown 组件文档版**
 
 你现在是 **在补 Flutter 布局基础**，还是 **项目中 Row 经常 overflow 报错**？我可以直接对症继续讲 👊
+-------------------------------
+下面按 **Flutter 官方 `Row` 构造函数源码顺序** 整理 **Row 组件参数大全**，**不改结构**，并且 **每个参数后直接写中文注释**，方便你 **直接对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/widgets.dart`（`Row` 本质是 `Flex` 的横向实现）
+> * 顺序严格贴近官方构造函数
+> * 注释偏向「源码语义级理解」
+
+---
+
+## Row 构造函数（源码结构 + 中文注释）
+
+```dart
+const Row({
+  Key? key, // widget 唯一标识，用于 widget 树 diff 和重建
+
+  MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start, 
+  // 主轴对齐方式（Row 中主轴是水平方向）
+
+  MainAxisSize mainAxisSize = MainAxisSize.max, 
+  // 主轴尺寸占用策略（max 占满 / min 包裹内容）
+
+  CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center, 
+  // 交叉轴对齐方式（Row 中交叉轴是垂直方向）
+
+  TextDirection? textDirection, 
+  // 水平方向的文本方向（影响 start / end 的含义）
+
+  VerticalDirection verticalDirection = VerticalDirection.down, 
+  // 垂直方向排列顺序（down 从上到下，up 从下到上）
+
+  TextBaseline? textBaseline, 
+  // 文本基线对齐方式（当 crossAxisAlignment 为 baseline 时必须提供）
+
+  List<Widget> children = const <Widget>[], 
+  // 子组件列表（按顺序水平排列）
+})
+```
+
+---
+
+## 核心参数源码级理解
+
+### 一、主轴（Horizontal）相关 ⭐⭐⭐
+
+```dart
+mainAxisAlignment
+mainAxisSize
+```
+
+#### `mainAxisAlignment`
+
+```dart
+MainAxisAlignment.start        // 从左开始排列
+MainAxisAlignment.end          // 从右开始排列
+MainAxisAlignment.center       // 居中
+MainAxisAlignment.spaceBetween // 两端对齐，中间等距
+MainAxisAlignment.spaceAround  // 子组件两侧留空
+MainAxisAlignment.spaceEvenly  // 所有间距完全一致
+```
+
+#### `mainAxisSize`
+
+```dart
+MainAxisSize.max // Row 占满父容器宽度（默认）
+MainAxisSize.min // Row 宽度等于子组件宽度之和
+```
+
+---
+
+### 二、交叉轴（Vertical）相关 ⭐⭐⭐
+
+```dart
+crossAxisAlignment
+textBaseline
+verticalDirection
+```
+
+#### `crossAxisAlignment`
+
+```dart
+CrossAxisAlignment.start    // 顶部对齐
+CrossAxisAlignment.center  // 垂直居中（默认）
+CrossAxisAlignment.end     // 底部对齐
+CrossAxisAlignment.stretch // 拉伸填满高度（子组件不能有高度）
+CrossAxisAlignment.baseline // 按文本基线对齐（⚠️ 仅用于文字）
+```
+
+⚠️ 使用 `baseline` 时 **必须** 设置：
+
+```dart
+textBaseline: TextBaseline.alphabetic
+```
+
+---
+
+### 三、方向控制（国际化 & 排版）
+
+```dart
+textDirection
+verticalDirection
+```
+
+#### `textDirection`
+
+```dart
+TextDirection.ltr // 从左到右（英文、中文）
+TextDirection.rtl // 从右到左（阿拉伯语）
+```
+
+👉 影响 `start / end` 的方向含义
+
+---
+
+### 四、子组件
+
+```dart
+children
+```
+
+* Row **不支持滚动**
+* 子组件超出宽度 ⇒ **直接溢出报错（黄黑条）**
+* 常见解决方式：
+
+  * `Expanded`
+  * `Flexible`
+  * `SingleChildScrollView`
+
+---
+
+## Row 的本质（源码级一句话）
+
+> **Row 只是一个 `Flex(direction: Axis.horizontal)` 的语法糖**
+
+等价于：
+
+```dart
+Flex(
+  direction: Axis.horizontal,
+  children: [...],
+)
+```
+
+---
+
+## 常见错误 & 源码级原因
+
+### ❌ Row 溢出
+
+```dart
+Row(
+  children: [
+    Text('超长文本'),
+    Text('超长文本'),
+  ],
+)
+```
+
+👉 Row **不会自动换行 / 滚动**
+
+### ✅ 正确做法
+
+```dart
+Row(
+  children: [
+    Expanded(
+      child: Text('超长文本'),
+    ),
+  ],
+)
+```
+
+---
+
+## Row / Column 参数完全一致（重要）
+
+| 组件     | 主轴方向 |
+| ------ | ---- |
+| Row    | 水平   |
+| Column | 垂直   |
+
+👉 **所有参数语义完全相同，只是轴方向不同**
+
+---
+
+## 一句话总结（架构级）
+
+> **Row 是“最基础的横向布局容器”**
+>
+> * 不负责滚动
+> * 不负责换行
+> * 一切空间分配交给 `Expanded / Flexible`
+
+---
+
+如果你愿意，我可以继续按这个 **源码对照风格** 给你整理：
+
+* `Column` 参数大全（完全同构，但我可补充差异点）
+* `Flex` 参数大全（Row / Column 的父类）
+* `Expanded / Flexible` 参数与布局算法
+
+你直接说下一个即可。

@@ -331,3 +331,201 @@ CheckboxListTile 非常适合：
 * ✅ **封装一套企业级「选择组件」**
 
 你直接选一个，我继续给你深挖 🚀
+--------------------------------------
+下面按 **Flutter 官方 `CheckboxListTile` 构造函数源码顺序** 整理 **CheckboxListTile 参数大全**，**不改结构**，并且 **每个参数后直接写中文注释**，方便你 **直接对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/material.dart`
+> * 本质：`ListTile + Checkbox` 的组合组件
+> * 顺序贴近官方构造函数
+> * 注释偏向「源码语义级理解」
+
+---
+
+## CheckboxListTile 构造函数（源码结构 + 中文注释）
+
+```dart
+CheckboxListTile({
+  Key? key, // widget 唯一标识，用于 widget 树 diff 和重建
+
+  required bool? value, // 当前是否选中（true/false/null，null 表示三态）
+  required ValueChanged<bool?>? onChanged, // 状态变化回调（为 null 时表示禁用）
+
+  Widget? title, // 主标题组件（通常是 Text）
+  Widget? subtitle, // 副标题组件（显示说明信息）
+
+  Widget? secondary, // 标题前或后的组件（通常是 Icon 或 Avatar）
+
+  bool isThreeLine = false, // 是否使用三行布局（title + subtitle + 额外空间）
+  bool dense = false, // 是否使用紧凑布局（减少垂直间距）
+
+  bool? selected, // 是否处于选中高亮状态（影响文本颜色等）
+
+  ValueChanged<bool?>? onFocusChange, // 焦点变化回调（获取/失去焦点）
+
+  Color? activeColor, // 选中状态下复选框的填充颜色
+  Color? checkColor, // 选中状态下对勾的颜色
+
+  Color? tileColor, // ListTile 默认背景色
+  Color? selectedTileColor, // 选中状态下 ListTile 的背景色
+
+  ShapeBorder? shape, // ListTile 的形状（圆角、边框等）
+
+  FocusNode? focusNode, // 焦点控制节点
+  bool autofocus = false, // 是否自动获取焦点
+
+  ListTileControlAffinity controlAffinity = ListTileControlAffinity.platform, 
+  // 复选框相对于文本的位置（leading / trailing / platform）
+
+  EdgeInsetsGeometry? contentPadding, // ListTile 内边距
+
+  bool tristate = false, // 是否启用三态模式（允许 value 为 null）
+
+  VisualDensity? visualDensity, // 视觉密度（影响整体紧凑程度）
+
+  MouseCursor? mouseCursor, // 鼠标悬停时的光标样式（桌面端）
+
+  MaterialStateProperty<Color?>? fillColor, // 复选框填充颜色（按状态变化）
+
+  MaterialStateProperty<Color?>? overlayColor, // 点击/悬停时的水波纹颜色
+
+  MaterialStateProperty<BorderSide?>? side, // 复选框边框样式（Material 3）
+
+  bool? enableFeedback, // 是否启用触觉/声音反馈
+
+  Color? hoverColor, // 鼠标悬停背景色（桌面/Web）
+
+  Color? splashColor, // 点击水波纹颜色
+})
+```
+
+---
+
+## 核心参数源码级理解
+
+### 一、状态控制（最核心）
+
+```dart
+value
+onChanged
+tristate
+```
+
+* `value` 决定当前状态
+* `onChanged = null` ⇒ 整个组件禁用
+* `tristate = true` 才允许 `value = null`
+
+---
+
+### 二、ListTile 相关（布局 & 文本）
+
+```dart
+title
+subtitle
+secondary
+isThreeLine
+dense
+contentPadding
+```
+
+👉 这些参数 **完全来自 ListTile**
+
+---
+
+### 三、Checkbox 相关（视觉 & 交互）
+
+```dart
+activeColor
+checkColor
+fillColor
+side
+overlayColor
+```
+
+👉 Material 2 / Material 3 样式差异主要在这里
+
+---
+
+### 四、交互 & 焦点
+
+```dart
+focusNode
+autofocus
+onFocusChange
+mouseCursor
+enableFeedback
+```
+
+---
+
+## 常见使用模板（源码对照理解）
+
+```dart
+CheckboxListTile(
+  title: const Text('同意用户协议'),
+  value: agreed,
+  onChanged: (value) {
+    setState(() {
+      agreed = value!;
+    });
+  },
+)
+```
+
+### 三态示例
+
+```dart
+CheckboxListTile(
+  title: const Text('全选'),
+  value: selectAll,
+  tristate: true,
+  onChanged: (value) {
+    setState(() {
+      selectAll = value;
+    });
+  },
+)
+```
+
+---
+
+## 和 Checkbox 的本质区别（一句话）
+
+> **CheckboxListTile = Checkbox + ListTile**
+
+* Checkbox：只负责状态
+* CheckboxListTile：负责 **状态 + 文本 + 点击区域 + 无障碍**
+
+---
+
+## 表单相关重要提醒（很多人会踩坑）
+
+> ⚠️ `CheckboxListTile` **不是 FormField**
+
+* ❌ 不支持 `validator`
+* ❌ 不支持 `onSaved`
+* 如需表单校验：
+
+  * 使用 `FormField<bool>` 包一层
+  * 或自己封装 `CheckboxFormField`
+
+---
+
+## 一句话总结（架构级）
+
+> **CheckboxListTile 是“列表型复选框交互组件”**
+>
+> * 设置页 / 协议确认
+> * 权限开关
+> * 多选列表
+
+---
+
+如果你下一步想继续这个 **源码对照系列**，我可以帮你整理：
+
+* `RadioListTile` 参数大全
+* `SwitchListTile` 参数大全
+* 自定义 `CheckboxFormField`（表单可校验）
+
+你直接说下一个即可。

@@ -351,3 +351,196 @@ RadioListTile **非常适合做“状态驱动 UI”**
 * ✅ **选择组件常见面试题合集**
 
 你直接选一个，我继续给你往下拆 🚀
+-----------------------------
+下面按 **Flutter 官方 `RadioListTile` 构造函数源码顺序** 整理 **RadioListTile 参数大全**，**不改结构**，并且 **每个参数后直接写中文注释**，方便你 **直接对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/material.dart`
+> * 本质：`ListTile + Radio` 的组合组件
+> * 顺序贴近官方构造函数
+> * 注释偏向「源码语义级理解」
+
+---
+
+## RadioListTile 构造函数（源码结构 + 中文注释）
+
+```dart
+RadioListTile<T>({
+  Key? key, // widget 唯一标识，用于 widget 树 diff 和重建
+
+  required T value, // 当前选项代表的值
+  required T? groupValue, // 当前选中值（与 value 相等时表示选中）
+
+  required ValueChanged<T?>? onChanged, // 选中变化回调（为 null 时表示禁用）
+
+  Widget? title, // 主标题组件（通常是 Text）
+  Widget? subtitle, // 副标题组件
+
+  Widget? secondary, // 标题前或后的组件（Icon / Avatar 等）
+
+  bool isThreeLine = false, // 是否使用三行布局
+  bool dense = false, // 是否使用紧凑布局
+
+  bool? selected, // 是否处于选中高亮状态（影响文本样式）
+
+  ValueChanged<bool>? onFocusChange, // 焦点变化回调
+
+  Color? activeColor, // 选中状态下单选按钮的颜色
+  Color? fillColor, // Material 3 中单选按钮填充色
+
+  Color? tileColor, // ListTile 默认背景色
+  Color? selectedTileColor, // 选中状态下 ListTile 背景色
+
+  ShapeBorder? shape, // ListTile 形状（圆角、边框）
+
+  FocusNode? focusNode, // 焦点控制节点
+  bool autofocus = false, // 是否自动获取焦点
+
+  ListTileControlAffinity controlAffinity = ListTileControlAffinity.platform, 
+  // 单选按钮相对于文本的位置（leading / trailing / platform）
+
+  EdgeInsetsGeometry? contentPadding, // ListTile 内边距
+
+  VisualDensity? visualDensity, // 视觉密度（整体紧凑程度）
+
+  MouseCursor? mouseCursor, // 鼠标悬停时光标样式（桌面端）
+
+  MaterialStateProperty<Color?>? overlayColor, // 点击/悬停时的覆盖颜色
+
+  bool? toggleable, // 是否允许再次点击已选中项取消选择
+
+  bool? enableFeedback, // 是否启用触觉/声音反馈
+
+  Color? hoverColor, // 鼠标悬停背景色
+
+  Color? splashColor, // 点击水波纹颜色
+})
+```
+
+---
+
+## 核心参数源码级理解
+
+### 一、单选状态控制（最核心）
+
+```dart
+value
+groupValue
+onChanged
+```
+
+* `value`：本项的值
+* `groupValue`：当前组选中的值
+* `value == groupValue` ⇒ 当前项选中
+
+👉 **所有 RadioListTile 共享同一个 groupValue**
+
+---
+
+### 二、ListTile 布局相关
+
+```dart
+title
+subtitle
+secondary
+isThreeLine
+dense
+contentPadding
+```
+
+---
+
+### 三、Radio 视觉 & 交互
+
+```dart
+activeColor
+fillColor
+overlayColor
+toggleable
+```
+
+* `toggleable = true` 才能取消已选中的项（少见但有用）
+
+---
+
+### 四、焦点 & 桌面端支持
+
+```dart
+focusNode
+autofocus
+onFocusChange
+mouseCursor
+hoverColor
+```
+
+---
+
+## 常见使用模板（源码对照理解）
+
+```dart
+String? gender;
+
+RadioListTile<String>(
+  title: const Text('男'),
+  value: 'male',
+  groupValue: gender,
+  onChanged: (value) {
+    setState(() {
+      gender = value;
+    });
+  },
+);
+```
+
+---
+
+## 和 Radio 的本质区别（一句话）
+
+> **RadioListTile = Radio + ListTile**
+
+* Radio：只负责单选状态
+* RadioListTile：负责 **状态 + 文本 + 点击区域 + 无障碍**
+
+---
+
+## 表单使用重要提醒
+
+> ⚠️ `RadioListTile` **不是 FormField**
+
+* ❌ 不支持 `validator`
+* ❌ 不支持 `onSaved`
+* 表单场景下需要：
+
+  * `FormField<T>` 包一层
+  * 或自定义 `RadioFormField`
+
+---
+
+## CheckboxListTile / RadioListTile / SwitchListTile 对照
+
+| 组件               | 多选 | 单选 | 表单支持 |
+| ---------------- | -- | -- | ---- |
+| CheckboxListTile | ✅  | ❌  | ❌    |
+| RadioListTile    | ❌  | ✅  | ❌    |
+| SwitchListTile   | ❌  | ❌  | ❌    |
+
+---
+
+## 一句话总结（架构级）
+
+> **RadioListTile 是“列表型单选组件”**
+>
+> * 性别 / 选项选择
+> * 设置页单选项
+> * 权限 / 模式选择
+
+---
+
+如果你愿意，我可以继续按这个 **源码对照风格** 给你整理：
+
+* `SwitchListTile` 参数大全
+* `FormField<T>` 参数大全（自定义表单必会）
+* Flutter 表单组件体系完整脑图
+
+你直接说下一个即可。

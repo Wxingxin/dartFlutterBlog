@@ -644,3 +644,191 @@ Row(
 * 封装一个 `AppTextButton`
 
 你直接说下一步想看哪一个即可。
+--------------------------
+下面是 **Flutter `TextButton` 组件的参数大全**，**严格保持源码结构**，仅在 **每个参数后追加中文注释**，不改动原有结构，方便你 **对照 Flutter SDK 源码学习**。
+
+---
+
+## TextButton 构造函数（源码结构）
+
+```dart
+const TextButton({
+  super.key,                         // 组件唯一标识 Key
+  required this.onPressed,           // 点击回调（为 null 时按钮禁用）
+  this.onLongPress,                  // 长按回调
+  this.onHover,                      // 鼠标悬停回调（Web / Desktop）
+  this.onFocusChange,                // 焦点变化回调（键盘 / 无障碍）
+  this.style,                        // 按钮样式（颜色、内边距、形状等）
+  this.focusNode,                    // 焦点控制节点
+  this.autofocus = false,            // 是否自动获取焦点
+  this.clipBehavior = Clip.none,     // 超出区域裁剪方式
+  required this.child,               // 按钮子组件（通常是 Text）
+})
+```
+
+---
+
+## 参数逐项说明（深入理解）
+
+### 1️⃣ onPressed（必传）
+
+```dart
+final VoidCallback? onPressed; // 点击按钮时触发，为 null 表示禁用态
+```
+
+* 为 `null` → 按钮灰色、不可点击
+* 非 `null` → 正常可交互
+* **所有 Material Button 的禁用机制核心**
+
+---
+
+### 2️⃣ onLongPress
+
+```dart
+final VoidCallback? onLongPress; // 长按触发（移动端常用）
+```
+
+* Android / iOS 生效
+* Web/桌面一般不常用
+
+---
+
+### 3️⃣ onHover
+
+```dart
+final ValueChanged<bool>? onHover; // 鼠标进入 / 离开按钮区域
+```
+
+* `true`：鼠标移入
+* `false`：鼠标移出
+* **仅 Web / Desktop 有意义**
+
+---
+
+### 4️⃣ onFocusChange
+
+```dart
+final ValueChanged<bool>? onFocusChange; // 焦点获得 / 失去时回调
+```
+
+* 键盘 Tab 导航
+* 无障碍（Accessibility）
+* Desktop / Web 常用
+
+---
+
+### 5️⃣ style（⭐重点）
+
+```dart
+final ButtonStyle? style; // 按钮外观样式配置
+```
+
+用于控制：
+
+* 文字颜色
+* 背景色
+* 内边距
+* 圆角
+* 水波纹
+* 对齐方式
+
+示例（理解即可）：
+
+```dart
+TextButton(
+  style: TextButton.styleFrom(
+    foregroundColor: Colors.blue,    // 文字颜色
+    padding: EdgeInsets.all(12),      // 内边距
+  ),
+)
+```
+
+---
+
+### 6️⃣ focusNode
+
+```dart
+final FocusNode? focusNode; // 控制按钮焦点的节点
+```
+
+* 精确控制焦点流
+* 表单 / 键盘交互 / 无障碍场景
+
+---
+
+### 7️⃣ autofocus
+
+```dart
+final bool autofocus; // 构建后是否自动获取焦点
+```
+
+* 默认 `false`
+* Web / Desktop 场景更常用
+
+---
+
+### 8️⃣ clipBehavior
+
+```dart
+final Clip clipBehavior; // 子组件超出按钮区域的裁剪方式
+```
+
+常见值：
+
+* `Clip.none`（默认，不裁剪）
+* `Clip.hardEdge`
+* `Clip.antiAlias`
+
+⚠️ **通常只在自定义复杂 child 时使用**
+
+---
+
+### 9️⃣ child（必传）
+
+```dart
+final Widget child; // 按钮内部内容（通常是 Text）
+```
+
+常见：
+
+```dart
+Text('确定')
+Icon(Icons.add)
+Row(...)
+```
+
+---
+
+## TextButton 的继承关系（理解用）
+
+```text
+TextButton
+  ↓
+ButtonStyleButton
+  ↓
+StatefulWidget
+```
+
+👉 所有行为最终由 **ButtonStyleButton** 实现
+👉 `style` 本质是传给 ButtonStyleButton 的状态样式系统
+
+---
+
+## 常见对比理解（一句话）
+
+| 按钮             | 说明           |
+| -------------- | ------------ |
+| TextButton     | 纯文本按钮（无默认背景） |
+| ElevatedButton | 有背景、有阴影      |
+| OutlinedButton | 有边框          |
+
+---
+
+如果你愿意，下一步我可以帮你做：
+
+* ✅ `TextButton.styleFrom` 参数大全（源码级）
+* ✅ `ButtonStyle` 全字段拆解（状态机级）
+* ✅ `TextButton` 在 **ThemeData** 中的全局配置
+* ✅ TextButton / ElevatedButton / OutlinedButton 源码差异对照表
+
+你可以直接告诉我：**“继续拆 style”** 或 **“看源码流转”**。

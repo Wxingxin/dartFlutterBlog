@@ -337,3 +337,147 @@ CustomScrollView(
 * ✅ **SliverList 完整体系**
 
 你直接说：**“分页加载” / “性能优化” / “GridView”**，我就继续 👍
+---------------------------------
+下面是 **Flutter `ListView` 组件的参数大全**，**严格保持 Flutter SDK 源码中的构造函数结构**，**不改结构**，**仅在每个参数后直接追加中文注释**，方便你 **逐行对照源码学习（ScrollView / Sliver 体系）**。
+
+---
+
+## ListView 默认构造函数（源码结构）
+
+```dart
+ListView({
+  super.key,                                   // 组件唯一标识 Key
+  this.scrollDirection = Axis.vertical,        // 滚动方向（垂直 / 水平）
+  this.reverse = false,                        // 是否反向滚动
+  this.controller,                             // 滚动控制器 ScrollController
+  this.primary,                                // 是否为主滚动视图（与 controller 互斥）
+  this.physics,                                // 滚动物理效果（回弹 / 禁止滚动等）
+  this.shrinkWrap = false,                     // 是否根据子组件大小收缩自身
+  this.padding,                                // 列表内边距
+  this.itemExtent,                             // 每个子项的固定高度（性能优化）
+  this.prototypeItem,                          // 子项原型，用于计算 itemExtent
+  this.addAutomaticKeepAlives = true,          // 是否自动保活子组件状态
+  this.addRepaintBoundaries = true,            // 是否为子组件添加重绘边界
+  this.addSemanticIndexes = true,              // 是否添加语义索引（无障碍）
+  this.cacheExtent,                            // 预加载区域大小
+  List<Widget> children = const <Widget>[],    // 子组件列表（一次性渲染）
+  this.semanticChildCount,                     // 语义子节点数量（无障碍）
+  this.dragStartBehavior = DragStartBehavior.start, // 拖拽开始行为
+  this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual, // 键盘消失策略
+  this.restorationId,                          // 状态恢复 ID
+  this.clipBehavior = Clip.hardEdge,            // 子组件裁剪方式
+})
+```
+
+---
+
+## ⚠️ 高频但容易误解的参数（源码级说明）
+
+### itemExtent
+
+```dart
+this.itemExtent, // 强制每个 item 高度一致，大幅提升滚动性能
+```
+
+* **已知固定高度列表，强烈建议使用**
+* RenderSliverFixedExtentList
+
+---
+
+### prototypeItem
+
+```dart
+this.prototypeItem, // 用一个“样本 item”来推导高度
+```
+
+* 与 `itemExtent` 互斥
+* Flutter 自动测量一次
+
+---
+
+### shrinkWrap（⚠️性能点）
+
+```dart
+this.shrinkWrap = false, // 是否根据子组件大小决定自身尺寸
+```
+
+* `true`：适合嵌套滚动
+* `true`：**性能明显下降**
+* 内部使用 `ShrinkWrappingViewport`
+
+---
+
+### primary
+
+```dart
+this.primary, // 是否使用 PrimaryScrollController
+```
+
+* `true`：自动使用最近的 `PrimaryScrollController`
+* 与 `controller` **不能同时使用**
+
+---
+
+### cacheExtent
+
+```dart
+this.cacheExtent, // 提前渲染的滚动缓冲区域
+```
+
+* 提前加载屏幕外 item
+* 优化快速滚动体验
+* 增大 → 占内存
+
+---
+
+## ListView 本质（源码视角）
+
+```text
+ListView
+  ↓
+BoxScrollView
+  ↓
+ScrollView
+  ↓
+StatelessWidget
+```
+
+最终内部转换为：
+
+```text
+SliverList / SliverFixedExtentList
+```
+
+---
+
+## ListView 的几个“变体构造函数”（不展开，仅标注）
+
+> 参数结构不同，但核心字段一致
+
+* `ListView.builder` → 懒加载（最常用）
+* `ListView.separated` → 带分割线
+* `ListView.custom` → 自定义 SliverChildDelegate
+
+如果你需要，我可以 **逐个把 builder / separated 的构造函数参数也按源码结构拆出来**。
+
+---
+
+## 什么时候不该用 ListView？
+
+| 场景     | 推荐                                      |
+| ------ | --------------------------------------- |
+| 超大列表   | ListView.builder                        |
+| 复杂滚动组合 | CustomScrollView                        |
+| 网格布局   | GridView                                |
+| 高性能长列表 | SliverList + SliverChildBuilderDelegate |
+
+---
+
+如果你下一步想继续深入，我可以直接帮你：
+
+* ✅ `ListView.builder` 参数大全（源码结构）
+* ✅ `SliverChildDelegate` 三兄弟完整对比
+* ✅ `ListView` vs `SingleChildScrollView` 源码级差异
+* ✅ 从 ListView 一路追到 RenderSliver 的布局流程
+
+你直接说：**“继续 builder”** 或 **“看 Sliver 原理”** 即可。

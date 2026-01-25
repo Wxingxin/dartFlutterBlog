@@ -691,3 +691,172 @@ OutlinedButton(
 * Material 2 vs Material 3 按钮差异
 
 你直接告诉我下一步想看哪一个即可。
+--------------------------------------
+下面是 **Flutter `OutlinedButton` 组件的参数大全**，**完全按照 Flutter SDK 源码的构造函数结构** 编写，**不改变结构**，**仅在每个参数后直接追加中文注释**，方便你逐行 **对照源码学习 ButtonStyleButton 体系**。
+
+---
+
+## OutlinedButton 构造函数（源码结构）
+
+```dart
+const OutlinedButton({
+  super.key,                         // 组件唯一标识 Key
+  required this.onPressed,           // 点击回调（为 null 时按钮禁用）
+  this.onLongPress,                  // 长按回调（移动端）
+  this.onHover,                      // 鼠标悬停回调（Web / Desktop）
+  this.onFocusChange,                // 焦点变化回调（键盘 / 无障碍）
+  this.style,                        // 按钮样式（边框 / 颜色 / 内边距等）
+  this.focusNode,                    // 焦点控制节点
+  this.autofocus = false,            // 是否自动获取焦点
+  this.clipBehavior = Clip.none,     // 子组件超出区域裁剪方式
+  required this.child,               // 按钮内容（通常是 Text）
+})
+```
+
+---
+
+## 参数逐项说明（源码级理解）
+
+### 1️⃣ onPressed（必传）
+
+```dart
+final VoidCallback? onPressed; // 点击触发回调，为 null 时进入 disabled 状态
+```
+
+* 置 `null` → 按钮禁用
+* Material 所有按钮统一禁用逻辑入口
+
+---
+
+### 2️⃣ onLongPress
+
+```dart
+final VoidCallback? onLongPress; // 长按触发（常用于移动端）
+```
+
+---
+
+### 3️⃣ onHover
+
+```dart
+final ValueChanged<bool>? onHover; // 鼠标移入 / 移出时回调
+```
+
+* Web / Desktop 专用
+* `true`：hover
+* `false`：leave
+
+---
+
+### 4️⃣ onFocusChange
+
+```dart
+final ValueChanged<bool>? onFocusChange; // 焦点获得 / 失去时回调
+```
+
+* 键盘 Tab 切换
+* 无障碍导航
+
+---
+
+### 5️⃣ style（⭐OutlinedButton 核心）
+
+```dart
+final ButtonStyle? style; // OutlinedButton 的视觉样式配置
+```
+
+主要控制：
+
+* `side` → 边框（OutlinedButton 独有重点）
+* `foregroundColor` → 文本 / 图标颜色
+* `overlayColor` → 水波纹
+* `padding` → 内边距
+* `shape` → 圆角
+
+示例理解：
+
+```dart
+style: OutlinedButton.styleFrom(
+  side: BorderSide(color: Colors.blue), // 边框颜色
+)
+```
+
+---
+
+### 6️⃣ focusNode
+
+```dart
+final FocusNode? focusNode; // 手动管理焦点
+```
+
+---
+
+### 7️⃣ autofocus
+
+```dart
+final bool autofocus; // 构建后是否自动获取焦点
+```
+
+* 默认 `false`
+
+---
+
+### 8️⃣ clipBehavior
+
+```dart
+final Clip clipBehavior; // 超出区域裁剪方式
+```
+
+* 通常保持 `Clip.none`
+
+---
+
+### 9️⃣ child（必传）
+
+```dart
+final Widget child; // 按钮子组件（Text / Icon / Row 等）
+```
+
+---
+
+## OutlinedButton 的本质（源码视角）
+
+```text
+OutlinedButton
+  ↓
+ButtonStyleButton
+  ↓
+StatefulWidget
+```
+
+* OutlinedButton **没有独立渲染逻辑**
+* 样式全部通过 `ButtonStyle` 注入
+* 区别仅在 **默认 style 的差异**
+
+---
+
+## OutlinedButton 默认“特性”
+
+| 特性   | 说明                     |
+| ---- | ---------------------- |
+| 默认背景 | 透明                     |
+| 默认边框 | `BorderSide(width: 1)` |
+| 禁用态  | 边框颜色变灰                 |
+| 水波纹  | 覆盖在透明背景上               |
+
+---
+
+## 与 TextButton / ElevatedButton 的源码差异一句话
+
+> **三者构造函数参数一模一样，区别只在默认 ButtonStyle**
+
+---
+
+如果你愿意继续，我可以直接帮你：
+
+* ✅ `OutlinedButton.styleFrom` 参数逐个源码注释
+* ✅ `ButtonStyle` 所有字段状态映射表（hover / pressed / disabled）
+* ✅ 三种按钮默认 style 的源码对比
+* ✅ 从 `OutlinedButton` 一路追到 `InkResponse` 的点击链路
+
+你直接说：**“继续 styleFrom”** 或 **“看 ButtonStyle 全字段”** 即可。

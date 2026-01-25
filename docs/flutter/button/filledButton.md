@@ -290,3 +290,181 @@ FilledButton(
 3️⃣ **按钮状态设计（hover / pressed / focused）详解**
 
 你挑一个，我直接展开 🔥
+-=---------------------
+下面是 **Flutter `FilledButton` 组件的参数大全**，**严格按照 Flutter SDK 源码构造函数结构**，**不改结构**，**仅在每个参数后直接追加中文注释**，方便你 **逐行对照源码（Material 3）学习**。
+
+---
+
+## FilledButton 构造函数（源码结构）
+
+```dart
+const FilledButton({
+  super.key,                         // 组件唯一标识 Key
+  required this.onPressed,           // 点击回调（为 null 时按钮禁用）
+  this.onLongPress,                  // 长按回调（移动端）
+  this.onHover,                      // 鼠标悬停回调（Web / Desktop）
+  this.onFocusChange,                // 焦点变化回调（键盘 / 无障碍）
+  this.style,                        // 按钮样式（背景色 / 前景色 / 圆角等）
+  this.focusNode,                    // 焦点控制节点
+  this.autofocus = false,            // 是否自动获取焦点
+  this.clipBehavior = Clip.none,     // 子组件超出按钮区域裁剪方式
+  required this.child,               // 按钮内容（通常是 Text）
+})
+```
+
+> ⚠️ 注意：**FilledButton 是 Material 3（M3）按钮**，Flutter 3.7+ 引入，用于取代部分 `ElevatedButton` 使用场景。
+
+---
+
+## 参数逐项说明（源码级理解）
+
+### 1️⃣ onPressed（必传）
+
+```dart
+final VoidCallback? onPressed; // 点击触发回调，为 null 时按钮进入禁用态
+```
+
+* `null` → disabled
+* 非 `null` → 可交互
+* 所有 Material Button 统一的禁用判断入口
+
+---
+
+### 2️⃣ onLongPress
+
+```dart
+final VoidCallback? onLongPress; // 长按触发（主要用于移动端）
+```
+
+---
+
+### 3️⃣ onHover
+
+```dart
+final ValueChanged<bool>? onHover; // 鼠标进入 / 离开按钮区域回调
+```
+
+* 仅 Web / Desktop 有意义
+* `true`：hover
+* `false`：leave
+
+---
+
+### 4️⃣ onFocusChange
+
+```dart
+final ValueChanged<bool>? onFocusChange; // 焦点获得 / 失去时回调
+```
+
+* 键盘导航
+* 无障碍支持（Accessibility）
+
+---
+
+### 5️⃣ style（⭐FilledButton 核心）
+
+```dart
+final ButtonStyle? style; // FilledButton 的视觉样式定义
+```
+
+常用于控制：
+
+* `backgroundColor` → 填充背景色（FilledButton 核心）
+* `foregroundColor` → 文本 / 图标颜色
+* `overlayColor` → 点击 / hover 水波纹
+* `padding` → 内边距
+* `shape` → 圆角形状
+* `elevation` → 阴影（默认很轻或无）
+
+示例理解：
+
+```dart
+style: FilledButton.styleFrom(
+  backgroundColor: Colors.blue, // 填充背景
+)
+```
+
+---
+
+### 6️⃣ focusNode
+
+```dart
+final FocusNode? focusNode; // 手动控制焦点节点
+```
+
+* 表单
+* 键盘操作
+* 无障碍导航
+
+---
+
+### 7️⃣ autofocus
+
+```dart
+final bool autofocus; // 构建后是否自动获取焦点
+```
+
+* 默认 `false`
+* Desktop / Web 更常见
+
+---
+
+### 8️⃣ clipBehavior
+
+```dart
+final Clip clipBehavior; // 超出按钮区域的裁剪方式
+```
+
+* 通常保持 `Clip.none`
+* 自定义 child 溢出时才考虑修改
+
+---
+
+### 9️⃣ child（必传）
+
+```dart
+final Widget child; // 按钮内部子组件（Text / Icon / Row 等）
+```
+
+---
+
+## FilledButton 的继承关系（源码视角）
+
+```text
+FilledButton
+  ↓
+ButtonStyleButton
+  ↓
+StatefulWidget
+```
+
+* 与 `TextButton / OutlinedButton / ElevatedButton` **完全同构**
+* **区别仅在默认 ButtonStyle（Material 3 规范）**
+
+---
+
+## FilledButton 的默认特性（Material 3）
+
+| 特性   | 说明                        |
+| ---- | ------------------------- |
+| 背景   | 有填充色（Primary / Secondary） |
+| 阴影   | 极弱或无（不同于 ElevatedButton）  |
+| 设计规范 | Material You（M3）          |
+| 推荐场景 | 主操作按钮（Primary Action）     |
+
+---
+
+## 与 ElevatedButton 的一句话源码级区别
+
+> **FilledButton 是 M3 语义按钮，ElevatedButton 是 M2 视觉按钮**
+
+---
+
+如果你继续深入，我可以直接给你：
+
+* ✅ `FilledButton.styleFrom` 参数源码级全注释
+* ✅ FilledButton vs ElevatedButton 默认 style 对照表
+* ✅ `ButtonStyle` 全字段 + 状态机（hover / pressed / disabled）
+* ✅ Material 2 / Material 3 按钮体系完整对比
+
+你直接说：**“继续 styleFrom”** 或 **“ButtonStyle 全字段”** 即可。

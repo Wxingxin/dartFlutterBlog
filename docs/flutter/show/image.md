@@ -527,3 +527,193 @@ Container(
 5. **仿 RN Image 组件封装一套**
 
 只要你说一个方向即可。
+----------------------------
+好，这个你提的要求**非常专业**，就是在**对照 Flutter 源码啃组件**的学习方式 👍
+下面我**严格按 Flutter `Image` 构造函数原结构**，**不改结构、不省参数**，在**每个参数后面直接写中文注释**，方便你逐行对照。
+
+---
+
+```dart
+const Image({
+  Key? key,
+  // Widget 唯一标识，一般不用手动传
+
+  required ImageProvider image,
+  // 图片数据源（核心参数）
+  // 如：AssetImage、NetworkImage、FileImage、MemoryImage
+
+  ImageFrameBuilder? frameBuilder,
+  // 帧构建回调
+  // 用于图片加载过程中的渐进动画、占位处理
+
+  ImageLoadingBuilder? loadingBuilder,
+  // 加载过程回调
+  // 常用于网络图片加载中的 loading 效果
+
+  ImageErrorWidgetBuilder? errorBuilder,
+  // 加载失败回调
+  // 网络图片失败时显示替代 Widget
+
+  String? semanticLabel,
+  // 无障碍语义描述（读屏用）
+
+  bool excludeFromSemantics = false,
+  // 是否从语义树中排除
+
+  double? width,
+  // 图片宽度
+
+  double? height,
+  // 图片高度
+
+  Color? color,
+  // 图片颜色滤镜
+  // 常用于 icon / 灰度 / 着色
+
+  BlendMode? colorBlendMode,
+  // 颜色与图片的混合模式
+
+  BoxFit? fit,
+  // 图片填充方式
+  // 如：contain / cover / fill / fitWidth 等
+
+  AlignmentGeometry alignment = Alignment.center,
+  // 图片对齐方式
+
+  ImageRepeat repeat = ImageRepeat.noRepeat,
+  // 是否平铺
+  // repeat / repeatX / repeatY / noRepeat
+
+  Rect? centerSlice,
+  // 九宫格拉伸区域
+  // 常用于气泡、背景图
+
+  bool matchTextDirection = false,
+  // 是否根据文本方向（RTL）自动翻转图片
+
+  bool gaplessPlayback = false,
+  // 切换图片时是否避免闪烁
+  // 用于 ImageProvider 变化场景
+
+  FilterQuality filterQuality = FilterQuality.low,
+  // 图片缩放质量
+  // low / medium / high
+
+  bool isAntiAlias = false,
+  // 是否开启抗锯齿
+});
+```
+
+---
+
+## 🔥 Image 最常用的 5 个参数（你必须熟）
+
+```dart
+Image(
+  image: AssetImage('assets/logo.png'),
+  width: 100,
+  height: 100,
+  fit: BoxFit.cover,
+)
+```
+
+| 参数             | 使用频率  | 说明   |
+| -------------- | ----- | ---- |
+| image          | ⭐⭐⭐⭐⭐ | 必传   |
+| width / height | ⭐⭐⭐⭐⭐ | 尺寸控制 |
+| fit            | ⭐⭐⭐⭐  | 防止拉伸 |
+| alignment      | ⭐⭐⭐   | 定位   |
+| repeat         | ⭐⭐    | 背景平铺 |
+
+---
+
+## 🧠 高频进阶参数解析
+
+### 1️⃣ loadingBuilder（网络图片必学）
+
+```dart
+Image.network(
+  url,
+  loadingBuilder: (context, child, progress) {
+    if (progress == null) return child;
+    return CircularProgressIndicator();
+  },
+)
+```
+
+📌 **典型场景**：网络图片加载中显示 loading
+
+---
+
+### 2️⃣ errorBuilder（防崩 UI）
+
+```dart
+Image.network(
+  url,
+  errorBuilder: (context, error, stackTrace) {
+    return Icon(Icons.broken_image);
+  },
+)
+```
+
+📌 **生产环境必须用**
+
+---
+
+### 3️⃣ color + colorBlendMode（图标着色）
+
+```dart
+Image.asset(
+  'assets/icon.png',
+  color: Colors.red,
+  colorBlendMode: BlendMode.srcIn,
+)
+```
+
+📌 类似 Icon 的效果
+
+---
+
+### 4️⃣ centerSlice（九宫格拉伸）
+
+```dart
+Image.asset(
+  'assets/bubble.png',
+  centerSlice: Rect.fromLTWH(20, 20, 10, 10),
+)
+```
+
+📌 聊天气泡 / 卡片背景必备
+
+---
+
+## 🚀 Image 的 4 种常见用法速览
+
+| 用法   | 示例                |
+| ---- | ----------------- |
+| 本地图片 | `Image.asset()`   |
+| 网络图片 | `Image.network()` |
+| 文件图片 | `Image.file()`    |
+| 内存图片 | `Image.memory()`  |
+
+> 它们**最终都会走到这个 `Image` 构造函数**
+
+---
+
+## 学习建议（很实在）
+
+你现在这个阶段，**不要死记全部参数**，而是：
+
+1. **先记住结构**
+2. 会查源码
+3. 熟 8 个常用参数
+4. 用 loadingBuilder / errorBuilder 提升质量
+
+如果你愿意，下一步我可以帮你：
+
+* ✅ 对比 **Image vs Image.network**
+* ✅ **CachedNetworkImage 原理 & 替代 Image**
+* ✅ **Image + BoxFit 防变形完整对照表**
+* ✅ **Flutter 图片加载与性能优化**
+
+你点一个，我直接给你拆到源码级。

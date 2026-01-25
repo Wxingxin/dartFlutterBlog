@@ -366,3 +366,274 @@ Scaffold(
 * **真实项目中 Scaffold 的封装方案**
 
 你可以直接告诉我你现在在做 **首页 / 表单 / 聊天 / 管理后台** 哪一类页面。
+------------------
+下面是 **Flutter `Scaffold` 构造函数参数大全**，**严格保持源码中的参数结构与顺序**，**每个参数后直接写中文注释**，不做重排、不做抽象，便于你 **对照 Flutter 源码 / IDE 跳转逐项学习**。
+
+> 对应源码位置：`material/scaffold.dart`
+
+---
+
+```dart
+const Scaffold({
+  this.key,                              // Widget 的唯一标识，用于元素树定位
+  this.appBar,                           // 顶部应用栏（通常是 AppBar）
+  this.body,                             // 页面主体内容区域
+  this.floatingActionButton,             // 悬浮操作按钮（FAB）
+  this.floatingActionButtonLocation,     // FAB 的位置策略
+  this.floatingActionButtonAnimator,     // FAB 出现/消失动画
+  this.persistentFooterButtons,          // 底部常驻按钮组（已逐步被弃用）
+  this.drawer,                           // 左侧抽屉菜单
+  this.endDrawer,                        // 右侧抽屉菜单
+  this.drawerScrimColor,                 // 抽屉展开时的遮罩颜色
+  this.backgroundColor,                  // Scaffold 背景色
+  this.bottomNavigationBar,              // 底部导航栏
+  this.bottomSheet,                      // 底部工作区（非模态）
+  this.onDrawerChanged,                  // 抽屉打开/关闭回调
+  this.onEndDrawerChanged,               // 右侧抽屉打开/关闭回调
+  this.resizeToAvoidBottomInset,          // 是否避让键盘（自动调整 body）
+  this.primary,                          // 是否占用系统状态栏高度
+  this.extendBody,                       // body 是否延伸到 bottomNavigationBar 下方
+  this.extendBodyBehindAppBar,            // body 是否延伸到 AppBar 后面
+  this.restorationId,                    // 状态恢复 ID（状态恢复系统）
+});
+```
+
+---
+
+## 一、核心布局参数（必须掌握）
+
+### `appBar`
+
+```dart
+this.appBar, // 页面顶部区域，通常使用 AppBar
+```
+
+* 类型：`PreferredSizeWidget`
+* 常见：`AppBar`
+* 影响 SafeArea / 状态栏
+
+---
+
+### `body`
+
+```dart
+this.body, // 页面主要内容区域
+```
+
+* 页面主体
+* 会自动避开：
+
+  * AppBar
+  * BottomNavigationBar（除非 extendBody）
+
+---
+
+### `backgroundColor`
+
+```dart
+this.backgroundColor, // Scaffold 整体背景颜色
+```
+
+* 覆盖 Theme 的 scaffoldBackgroundColor
+
+---
+
+## 二、浮动与底部相关（高频）
+
+### `floatingActionButton`
+
+```dart
+this.floatingActionButton, // 悬浮按钮
+```
+
+---
+
+### `floatingActionButtonLocation`
+
+```dart
+this.floatingActionButtonLocation, // FAB 的布局位置
+```
+
+* 常见：
+
+  * `FloatingActionButtonLocation.endFloat`
+  * `centerDocked`
+
+---
+
+### `floatingActionButtonAnimator`
+
+```dart
+this.floatingActionButtonAnimator, // FAB 切换动画
+```
+
+* 默认：`FloatingActionButtonAnimator.scaling`
+
+---
+
+### `bottomNavigationBar`
+
+```dart
+this.bottomNavigationBar, // 页面底部导航栏
+```
+
+* 常用：`BottomNavigationBar`
+* 也可自定义 Widget
+
+---
+
+### `bottomSheet`
+
+```dart
+this.bottomSheet, // 底部常驻工作区（非弹出）
+```
+
+* 与 `showModalBottomSheet` 不同
+* 页面一部分
+
+---
+
+## 三、抽屉 Drawer 系列（侧边菜单）
+
+### `drawer`
+
+```dart
+this.drawer, // 左侧抽屉菜单
+```
+
+---
+
+### `endDrawer`
+
+```dart
+this.endDrawer, // 右侧抽屉菜单
+```
+
+---
+
+### `drawerScrimColor`
+
+```dart
+this.drawerScrimColor, // 抽屉展开时遮罩层颜色
+```
+
+---
+
+### `onDrawerChanged`
+
+```dart
+this.onDrawerChanged, // 左侧抽屉状态变化回调
+```
+
+---
+
+### `onEndDrawerChanged`
+
+```dart
+this.onEndDrawerChanged, // 右侧抽屉状态变化回调
+```
+
+---
+
+## 四、键盘 & 布局控制（非常重要）
+
+### `resizeToAvoidBottomInset`
+
+```dart
+this.resizeToAvoidBottomInset, // 是否自动避让键盘
+```
+
+* 默认：true
+* false：键盘会覆盖 body
+
+---
+
+### `extendBody`
+
+```dart
+this.extendBody, // body 是否延伸到底部组件下方
+```
+
+* 常用于：
+
+  * 半透明 BottomNavigationBar
+
+---
+
+### `extendBodyBehindAppBar`
+
+```dart
+this.extendBodyBehindAppBar, // body 是否延伸到 AppBar 后面
+```
+
+* 常用于：
+
+  * 沉浸式头图
+  * Hero Banner
+
+---
+
+### `primary`
+
+```dart
+this.primary, // 是否占用系统状态栏高度
+```
+
+* true：考虑状态栏
+* false：不处理系统 padding
+
+---
+
+## 五、其他（了解即可）
+
+### `persistentFooterButtons`
+
+```dart
+this.persistentFooterButtons, // 底部固定按钮组（不推荐新项目使用）
+```
+
+---
+
+### `restorationId`
+
+```dart
+this.restorationId, // 页面状态恢复标识
+```
+
+* 用于：
+
+  * App 被系统回收后的状态恢复
+
+---
+
+## 六、Scaffold 结构示意（理解用）
+
+```text
+Scaffold
+├── AppBar
+├── Body
+├── FloatingActionButton
+├── BottomNavigationBar
+├── Drawer / EndDrawer
+└── BottomSheet
+```
+
+---
+
+## 七、源码学习建议（非常适合你现在阶段）
+
+重点看：
+
+1️⃣ `material/scaffold.dart`
+2️⃣ `_ScaffoldLayout`
+3️⃣ `ScaffoldMessenger`（SnackBar）
+
+---
+
+如果你愿意，下一步我可以帮你继续：
+
+* ✅ **AppBar 参数大全（同样方式）**
+* ✅ **ScaffoldMessenger / SnackBar 关系详解**
+* ✅ **Scaffold 为什么“不能嵌套”（面试高频）**
+
+你想接着看哪一个？

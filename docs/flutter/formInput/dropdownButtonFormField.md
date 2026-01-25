@@ -261,3 +261,199 @@ selectedItemBuilder: (context) {
 5. **仿 Web Select 的 Flutter 组件设计**
 
 你只要说一个方向，我直接给你完整实战方案。
+------------------------------------
+下面按 **Flutter 官方 `DropdownButtonFormField` 构造函数源码顺序** 整理 **DropdownButtonFormField 参数大全**，**不改结构**，并且 **每个参数后直接写中文注释**，方便你 **直接对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/material.dart`
+> * 本质：`DropdownButtonFormField<T> = FormField<T> + DropdownButton<T>`
+> * 顺序贴近官方构造函数
+> * 注释偏向「源码语义级理解」
+
+---
+
+## DropdownButtonFormField 构造函数（源码结构 + 中文注释）
+
+```dart
+DropdownButtonFormField<T>({
+  Key? key, // widget 唯一标识，用于 widget 树 diff 和重建
+
+  required List<DropdownMenuItem<T>>? items, // 下拉选项列表（每一项是 DropdownMenuItem）
+  DropdownButtonBuilder? selectedItemBuilder, // 自定义选中项的构建方式（用于复杂 UI）
+
+  T? value, // 当前选中的值（必须与 items 中 value 匹配）
+  Widget? hint, // 未选中时显示的提示内容
+  Widget? disabledHint, // 禁用状态下未选中时显示的内容
+
+  ValueChanged<T?>? onChanged, // 选中项变化回调（null 表示禁用）
+
+  VoidCallback? onTap, // 点击下拉框时触发（展开前）
+
+  int elevation = 8, // 下拉菜单的阴影高度（Material 阴影）
+  TextStyle? style, // 选中项文本样式
+
+  Widget? icon, // 下拉箭头图标
+  Color? iconDisabledColor, // 禁用状态下图标颜色
+  Color? iconEnabledColor, // 启用状态下图标颜色
+  double iconSize = 24.0, // 图标大小
+
+  bool isDense = true, // 是否使用紧凑布局（FormField 默认 true）
+  bool isExpanded = false, // 是否让下拉框宽度填满父容器
+
+  double? itemHeight, // 下拉菜单中每一项的高度
+  Color? focusColor, // 获取焦点时的高亮颜色
+
+  FocusNode? focusNode, // 焦点控制节点
+  bool autofocus = false, // 是否自动获取焦点
+
+  InputDecoration? decoration, // 表单装饰（边框、label、错误提示等）
+
+  FormFieldSetter<T>? onSaved, // 表单保存时回调（FormState.save）
+  FormFieldValidator<T>? validator, // 表单校验函数（返回错误文本）
+
+  AutovalidateMode? autovalidateMode, // 自动校验模式（禁用 / 总是 / 用户交互后）
+
+  double? menuMaxHeight, // 下拉菜单最大高度（超过可滚动）
+
+  bool? enabled, // 是否启用（false 等价于 onChanged = null）
+
+  BorderRadius? borderRadius, // 下拉菜单圆角（新版本 Material 支持）
+
+  Color? dropdownColor, // 下拉菜单背景色
+
+  AlignmentGeometry alignment = AlignmentDirectional.centerStart, // 下拉菜单内容对齐方式
+})
+```
+
+---
+
+## 参数核心分类理解（源码级）
+
+### 一、数据 & 选项（最核心）
+
+```dart
+items
+value
+onChanged
+```
+
+* `items`：定义“能选什么”
+* `value`：定义“当前选了什么”
+* `onChanged`：定义“选中后怎么处理”
+
+⚠️ **value 必须存在于 items 中，否则会 assert 报错**
+
+---
+
+### 二、表单能力（来自 FormField）
+
+```dart
+onSaved
+validator
+autovalidateMode
+decoration
+```
+
+👉 这也是它和 `DropdownButton` 的**本质区别**
+
+---
+
+### 三、布局 & 交互
+
+```dart
+isDense
+isExpanded
+itemHeight
+menuMaxHeight
+alignment
+```
+
+* 表单中 **几乎必用 `isExpanded: true`**
+* 否则在 Row / Column 中可能宽度异常
+
+---
+
+### 四、视觉 & Material 风格
+
+```dart
+icon
+iconSize
+dropdownColor
+borderRadius
+elevation
+style
+```
+
+---
+
+## 常见源码级使用模板（理解用）
+
+```dart
+DropdownButtonFormField<String>(
+  decoration: const InputDecoration(
+    labelText: '性别',
+    border: OutlineInputBorder(),
+  ),
+  value: selectedGender,
+  items: const [
+    DropdownMenuItem(value: 'male', child: Text('男')),
+    DropdownMenuItem(value: 'female', child: Text('女')),
+  ],
+  onChanged: (value) {
+    setState(() {
+      selectedGender = value;
+    });
+  },
+  validator: (value) {
+    if (value == null) {
+      return '请选择性别';
+    }
+    return null;
+  },
+  onSaved: (value) {
+    gender = value!;
+  },
+)
+```
+
+---
+
+## 和 DropdownButton 的本质区别（一句话）
+
+> **DropdownButtonFormField = DropdownButton + FormField**
+
+* DropdownButton：
+  👉 只负责下拉选择
+* DropdownButtonFormField：
+  👉 负责 **选择 + 校验 + 保存 + 错误展示**
+
+---
+
+## 表单组件体系对照（你现在的位置）
+
+| 组件                          | 是否支持校验 | 是否支持保存 | 是否推荐用于 Form |
+| --------------------------- | ------ | ------ | ----------- |
+| TextField                   | ❌      | ❌      | ❌           |
+| DropdownButton              | ❌      | ❌      | ❌           |
+| **TextFormField**           | ✅      | ✅      | ✅           |
+| **DropdownButtonFormField** | ✅      | ✅      | ✅           |
+
+---
+
+## 一句话总结（架构级）
+
+> **DropdownButtonFormField 是“标准表单下拉选择组件”**
+>
+> * 所有需要校验的下拉选择
+> * 都应该优先使用它，而不是 DropdownButton
+
+---
+
+如果你愿意，我可以继续按这个 **源码对照风格** 给你整理：
+
+* `FormField<T>` 参数大全（真正的表单抽象核心）
+* `InputDecoration` 参数大全（Text / Dropdown 共用）
+* Flutter 表单 **企业级封装模式（超实用）**
+
+你直接说下一个要哪一个。

@@ -648,3 +648,176 @@ ElevatedButton(
 * ✅ Flutter 按钮组件 **学习优先级建议**
 
 你可以直接告诉我下一步想看哪一个。
+-----------------------------
+下面是 **Flutter `ElevatedButton` 组件的参数大全**，**严格保持 Flutter SDK 源码中的构造函数结构**，**不改结构**，**仅在每个参数后直接追加中文注释**，方便你 **逐行对照源码学习（Material 2 按钮体系）**。
+
+---
+
+## ElevatedButton 构造函数（源码结构）
+
+```dart
+const ElevatedButton({
+  super.key,                         // 组件唯一标识 Key
+  required this.onPressed,           // 点击回调（为 null 时按钮禁用）
+  this.onLongPress,                  // 长按回调（移动端）
+  this.onHover,                      // 鼠标悬停回调（Web / Desktop）
+  this.onFocusChange,                // 焦点变化回调（键盘 / 无障碍）
+  this.style,                        // 按钮样式（背景色 / 阴影 / 圆角等）
+  this.focusNode,                    // 焦点控制节点
+  this.autofocus = false,            // 是否自动获取焦点
+  this.clipBehavior = Clip.none,     // 子组件超出区域裁剪方式
+  required this.child,               // 按钮内容（通常是 Text）
+})
+```
+
+---
+
+## 参数逐项说明（源码级理解）
+
+### 1️⃣ onPressed（必传）
+
+```dart
+final VoidCallback? onPressed; // 点击触发回调，为 null 时进入 disabled 状态
+```
+
+* 所有 Material Button 禁用态的统一入口
+* `null` ≈ `enabled = false`
+
+---
+
+### 2️⃣ onLongPress
+
+```dart
+final VoidCallback? onLongPress; // 长按触发（移动端更常见）
+```
+
+---
+
+### 3️⃣ onHover
+
+```dart
+final ValueChanged<bool>? onHover; // 鼠标进入 / 离开按钮区域回调
+```
+
+* Web / Desktop 专用
+* `true`：hover
+* `false`：leave
+
+---
+
+### 4️⃣ onFocusChange
+
+```dart
+final ValueChanged<bool>? onFocusChange; // 焦点获得 / 失去时回调
+```
+
+* 键盘导航
+* 无障碍支持（Accessibility）
+
+---
+
+### 5️⃣ style（⭐ElevatedButton 核心）
+
+```dart
+final ButtonStyle? style; // ElevatedButton 的视觉样式定义
+```
+
+常用于控制：
+
+* `backgroundColor` → 背景色
+* `foregroundColor` → 文字 / 图标颜色
+* `elevation` → 阴影高度（ElevatedButton 核心特征）
+* `shadowColor` → 阴影颜色
+* `overlayColor` → 点击 / hover 水波纹
+* `padding` → 内边距
+* `shape` → 圆角形状
+
+示例理解：
+
+```dart
+style: ElevatedButton.styleFrom(
+  elevation: 4, // 阴影高度
+)
+```
+
+---
+
+### 6️⃣ focusNode
+
+```dart
+final FocusNode? focusNode; // 手动控制按钮焦点
+```
+
+---
+
+### 7️⃣ autofocus
+
+```dart
+final bool autofocus; // 构建后是否自动获取焦点
+```
+
+* 默认 `false`
+* Desktop / Web 更常用
+
+---
+
+### 8️⃣ clipBehavior
+
+```dart
+final Clip clipBehavior; // 子组件超出按钮区域的裁剪方式
+```
+
+* 通常保持 `Clip.none`
+* 只有自定义复杂 child 时才调整
+
+---
+
+### 9️⃣ child（必传）
+
+```dart
+final Widget child; // 按钮内部内容（Text / Icon / Row 等）
+```
+
+---
+
+## ElevatedButton 的继承关系（源码视角）
+
+```text
+ElevatedButton
+  ↓
+ButtonStyleButton
+  ↓
+StatefulWidget
+```
+
+* 与 `TextButton / OutlinedButton / FilledButton` 构造参数 **完全一致**
+* 差异只体现在 **默认 ButtonStyle（M2 vs M3）**
+
+---
+
+## ElevatedButton 的默认特性（Material 2）
+
+| 特性   | 说明            |
+| ---- | ------------- |
+| 背景   | 有填充色          |
+| 阴影   | 明显（elevation） |
+| 设计规范 | Material 2    |
+| 使用建议 | 旧项目 / 需要明显层级感 |
+
+---
+
+## 与 FilledButton 的一句话源码级区别
+
+> **ElevatedButton = M2 阴影按钮
+> FilledButton = M3 填充按钮（弱或无阴影）**
+
+---
+
+如果你要继续“源码级深挖”，我可以直接帮你：
+
+* ✅ `ElevatedButton.styleFrom` 参数全量中文注释
+* ✅ `ButtonStyle` 全字段 + 状态映射（hover / pressed / disabled）
+* ✅ 四种按钮默认 style 源码对照（Text / Outlined / Filled / Elevated）
+* ✅ 从 ElevatedButton → InkWell → RenderObject 的事件链路
+
+你直接说：**“继续 styleFrom”** 或 **“ButtonStyle 全字段”** 即可。

@@ -299,3 +299,143 @@ Align(
 * 🔥 帮你整理成 **Rspress / Markdown 笔记版**
 
 你现在是偏**记笔记**，还是**实战项目中用得有点乱**？我可以按你的用途继续拆 👍
+-----------------------
+下面是 **Flutter `Align` 组件的参数大全**，**严格保持 Flutter SDK 源码中的构造函数结构**，**不改结构**，**仅在每个参数后直接追加中文注释**，方便你 **逐行对照源码学习（RenderAligningShiftedBox）**。
+
+---
+
+## Align 构造函数（源码结构）
+
+```dart
+const Align({
+  super.key,                     // 组件唯一标识 Key
+  this.alignment = Alignment.center, // 子组件在父容器中的对齐方式
+  this.widthFactor,              // 宽度因子（子组件宽度 * widthFactor）
+  this.heightFactor,             // 高度因子（子组件高度 * heightFactor）
+  this.child,                    // 需要对齐的子组件
+})
+```
+
+---
+
+## 参数逐项说明（源码级理解）
+
+### 1️⃣ alignment（⭐核心）
+
+```dart
+final AlignmentGeometry alignment; // 子组件在父容器中的对齐规则
+```
+
+* 默认：`Alignment.center`
+* 常见值：
+
+  * `Alignment.topLeft`
+  * `Alignment.centerRight`
+  * `Alignment.bottomCenter`
+* 支持 `AlignmentDirectional`（RTL 适配）
+
+---
+
+### 2️⃣ widthFactor
+
+```dart
+final double? widthFactor; // 父组件宽度 = 子组件宽度 × widthFactor
+```
+
+* `null`：占满父约束（默认）
+* 非 `null`：父宽度按比例收缩
+* 常用于 **包裹内容宽度**
+
+---
+
+### 3️⃣ heightFactor
+
+```dart
+final double? heightFactor; // 父组件高度 = 子组件高度 × heightFactor
+```
+
+* 逻辑同 `widthFactor`
+* 常用于 **自适应高度**
+
+---
+
+### 4️⃣ child
+
+```dart
+final Widget? child; // 需要进行对齐的子组件
+```
+
+* 可以为 `null`
+* 为 `null` 时，Align 只占空间
+
+---
+
+## Align 的布局本质（源码视角）
+
+```text
+Align
+  ↓
+SingleChildRenderObjectWidget
+  ↓
+RenderAligningShiftedBox
+```
+
+### 核心行为一句话
+
+> **Align 先确定自身尺寸，再根据 alignment 偏移 child**
+
+---
+
+## widthFactor / heightFactor 的典型使用对比
+
+```dart
+Align(
+  alignment: Alignment.centerLeft,
+  widthFactor: 1.0, // 父宽 = child 宽
+  child: Text('Hello'),
+)
+```
+
+等价于：
+
+```dart
+IntrinsicWidth(
+  child: Align(
+    alignment: Alignment.centerLeft,
+    child: Text('Hello'),
+  ),
+)
+```
+
+但 **性能更好**。
+
+---
+
+## Align vs Center（源码级区别）
+
+| 组件     | 区别                                        |
+| ------ | ----------------------------------------- |
+| Align  | 支持 alignment / widthFactor / heightFactor |
+| Center | Align 的语法糖（alignment 固定为 center）          |
+
+```dart
+Center ≈ Align(alignment: Alignment.center)
+```
+
+---
+
+## Align vs Positioned（一句话）
+
+> **Align 参与布局计算
+> Positioned 直接绝对定位（Stack 中使用）**
+
+---
+
+如果你继续想深入，我可以直接帮你：
+
+* ✅ `Alignment` / `AlignmentDirectional` 参数数学含义
+* ✅ Align vs FractionallySizedBox / SizedBox 源码对比
+* ✅ RenderAligningShiftedBox 的 layout 过程图解
+* ✅ 常见对齐 + 尺寸控制组合速查表
+
+你直接说：**“继续 Alignment 原理”** 或 **“看 RenderObject”** 即可。

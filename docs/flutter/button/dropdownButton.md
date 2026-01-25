@@ -421,3 +421,307 @@ isExpanded: true,
 * Flutter 表单组件（TextFormField / Checkbox / Radio）全关系图
 
 你直接告诉我下一步想看哪一个即可。
+-----下面是 **Flutter `DropdownButton` 构造函数参数大全**，**严格保持源码中的参数顺序与结构**，**每个参数后面直接写中文注释**，不做重排、不做抽象，方便你 **直接对照 Flutter 源码 / IDE 跳转逐项学习**。
+
+> 对应源码位置：`material/dropdown.dart`
+
+---
+
+```dart
+DropdownButton({
+  Key? key,                               // Widget 的唯一标识
+  required List<DropdownMenuItem<T>>? items, // 下拉菜单项列表
+  DropdownButtonBuilder? selectedItemBuilder, // 自定义选中项显示构建器
+  T? value,                               // 当前选中的值
+  Widget? hint,                           // 未选择时显示的占位内容
+  Widget? disabledHint,                   // 禁用状态下显示的占位内容
+  required ValueChanged<T?>? onChanged,   // 选中项变化回调（为 null 时禁用）
+  VoidCallback? onTap,                    // 点击下拉按钮时回调
+  int elevation = 8,                      // 下拉菜单弹出时的阴影高度
+  TextStyle? style,                       // 下拉菜单文本样式
+  Widget? underline,                      // 下划线组件
+  Widget? icon,                           // 右侧下拉箭头图标
+  Color? iconDisabledColor,               // 禁用状态图标颜色
+  Color? iconEnabledColor,                // 启用状态图标颜色
+  double iconSize = 24.0,                 // 图标大小
+  bool isDense = false,                   // 是否使用紧凑高度
+  bool isExpanded = false,                // 是否横向占满父布局
+  double? itemHeight,                     // 每个菜单项高度
+  Color? focusColor,                      // 获取焦点时的背景颜色
+  FocusNode? focusNode,                   // 焦点控制节点
+  bool autofocus = false,                 // 是否自动获取焦点
+  Color? dropdownColor,                   // 下拉菜单背景颜色
+  double? menuMaxHeight,                  // 下拉菜单最大高度
+  bool? enableFeedback,                   // 是否启用触觉/声音反馈
+  AlignmentGeometry alignment = AlignmentDirectional.centerStart, // 内容对齐方式
+  BorderRadius? borderRadius,             // 下拉菜单圆角
+});
+```
+
+---
+
+## 一、最核心参数（必须掌握）
+
+### `items`
+
+```dart
+required List<DropdownMenuItem<T>>? items, // 下拉菜单的所有选项
+```
+
+* 每一项必须是 `DropdownMenuItem<T>`
+* `value` 必须在 items 的 value 中存在
+
+---
+
+### `value`
+
+```dart
+T? value, // 当前选中的值
+```
+
+* 为 null 时显示 hint
+* 必须与某个 `DropdownMenuItem.value` 相等
+
+---
+
+### `onChanged`
+
+```dart
+required ValueChanged<T?>? onChanged, // 选中变化回调
+```
+
+* 为 null ⇒ 整个 Dropdown 禁用
+* 触发于选择菜单项后
+
+---
+
+### `hint`
+
+```dart
+Widget? hint, // 未选择时显示的提示内容
+```
+
+---
+
+## 二、外观 & 布局相关（高频）
+
+### `icon`
+
+```dart
+Widget? icon, // 右侧下拉箭头图标
+```
+
+---
+
+### `iconSize`
+
+```dart
+double iconSize = 24.0, // 图标尺寸
+```
+
+---
+
+### `underline`
+
+```dart
+Widget? underline, // 下拉按钮下方的下划线
+```
+
+* 传 `SizedBox.shrink()` 可去除
+
+---
+
+### `isExpanded`
+
+```dart
+bool isExpanded = false, // 是否横向占满父布局
+```
+
+* 常见于表单布局
+
+---
+
+### `isDense`
+
+```dart
+bool isDense = false, // 是否使用紧凑高度
+```
+
+---
+
+### `style`
+
+```dart
+TextStyle? style, // 选中项和菜单项的文本样式
+```
+
+---
+
+## 三、菜单弹出相关（进阶）
+
+### `dropdownColor`
+
+```dart
+Color? dropdownColor, // 下拉菜单背景色
+```
+
+---
+
+### `elevation`
+
+```dart
+int elevation = 8, // 菜单弹出时的阴影高度
+```
+
+---
+
+### `menuMaxHeight`
+
+```dart
+double? menuMaxHeight, // 菜单最大高度（超出可滚动）
+```
+
+---
+
+### `itemHeight`
+
+```dart
+double? itemHeight, // 每一项的高度
+```
+
+---
+
+### `alignment`
+
+```dart
+AlignmentGeometry alignment, // 选中内容在按钮中的对齐方式
+```
+
+---
+
+### `borderRadius`
+
+```dart
+BorderRadius? borderRadius, // 菜单弹出层圆角
+```
+
+---
+
+## 四、焦点 & 交互（了解即可）
+
+### `focusNode`
+
+```dart
+FocusNode? focusNode, // 焦点控制
+```
+
+---
+
+### `autofocus`
+
+```dart
+bool autofocus = false, // 是否自动获取焦点
+```
+
+---
+
+### `focusColor`
+
+```dart
+Color? focusColor, // 聚焦时背景颜色
+```
+
+---
+
+### `onTap`
+
+```dart
+VoidCallback? onTap, // 点击下拉按钮时触发
+```
+
+---
+
+### `enableFeedback`
+
+```dart
+bool? enableFeedback, // 是否启用触觉/音效反馈
+```
+
+---
+
+## 五、禁用态相关
+
+### `disabledHint`
+
+```dart
+Widget? disabledHint, // 禁用状态显示内容
+```
+
+---
+
+### `iconDisabledColor`
+
+```dart
+Color? iconDisabledColor, // 禁用状态下图标颜色
+```
+
+---
+
+### `iconEnabledColor`
+
+```dart
+Color? iconEnabledColor, // 启用状态下图标颜色
+```
+
+---
+
+## 六、典型使用示例（对照源码理解）
+
+```dart
+DropdownButton<String>(
+  value: value,
+  hint: Text('请选择'),
+  isExpanded: true,
+  items: items.map((e) {
+    return DropdownMenuItem<String>(
+      value: e,
+      child: Text(e),
+    );
+  }).toList(),
+  onChanged: (v) {
+    setState(() => value = v);
+  },
+);
+```
+
+---
+
+## 七、相关组件关系（建议你顺着看源码）
+
+```text
+DropdownButton
+├── DropdownMenuItem
+├── _DropdownButtonState
+├── _DropdownRoute
+└── PopupRoute
+```
+
+---
+
+## 八、源码学习建议（给你明确路线）
+
+你可以重点跳这几个位置：
+
+1️⃣ `material/dropdown.dart`
+2️⃣ `_DropdownRoute`（弹出层）
+3️⃣ `DropdownMenuItem`
+
+---
+
+如果你愿意，下一步我可以继续给你：
+
+* ✅ **DropdownButtonFormField 参数大全**
+* ✅ **DropdownButton vs PopupMenuButton 区别**
+* ✅ **为什么 DropdownButton 不适合大数据量（源码角度）**
+
+你想继续哪一个？

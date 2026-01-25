@@ -363,3 +363,174 @@ class IconText extends StatelessWidget {
 * 🔥 帮你整理成 **Rspress / Markdown 可直接用的 Flex 文档**
 
 你现在更想 **继续深挖布局底层**，还是 **直接做一套常用布局模板**？我可以按你的目标继续往下带 👊
+-----------------------------------
+下面**严格按照 Flutter 源码中 `Flex` 组件的构造函数结构**整理，**不改结构**，只在**每个参数后直接写中文注释**，方便你对照源码学习。
+
+---
+
+```dart
+const Flex({
+  Key? key,                         // widget 的唯一标识，用于 element 树更新
+  required this.direction,          // 主轴方向：Axis.horizontal / Axis.vertical
+  this.mainAxisAlignment = MainAxisAlignment.start, // 主轴对齐方式
+  this.mainAxisSize = MainAxisSize.max,              // 主轴尺寸：占满还是包裹
+  this.crossAxisAlignment = CrossAxisAlignment.center, // 交叉轴对齐方式
+  this.textDirection,               // 水平方向时文字方向（影响 start/end）
+  this.verticalDirection = VerticalDirection.down,  // 垂直方向布局方向（down / up）
+  this.textBaseline,                // 文本基线对齐（用于 baseline 对齐）
+  this.clipBehavior = Clip.none,    // 超出区域的裁剪行为
+  List<Widget> children = const <Widget>[], // 子组件列表
+}) : super(key: key, children: children);
+```
+
+---
+
+## 🔎 重要补充说明（理解源码必看）
+
+### 1️⃣ `direction`（最核心参数）
+
+```dart
+Axis.horizontal // Row 的本质
+Axis.vertical   // Column 的本质
+```
+
+👉 **Row / Column 本质就是 Flex 的语法糖**
+
+```dart
+class Row extends Flex {
+  const Row(...) : super(direction: Axis.horizontal);
+}
+
+class Column extends Flex {
+  const Column(...) : super(direction: Axis.vertical);
+}
+```
+
+---
+
+### 2️⃣ `mainAxisAlignment`
+
+```dart
+start        // 主轴起点对齐
+end          // 主轴终点对齐
+center       // 居中
+spaceBetween // 两端贴边，中间均分
+spaceAround  // 子组件周围留白
+spaceEvenly  // 完全等间距
+```
+
+📌 **作用在 `direction` 指定的方向**
+
+---
+
+### 3️⃣ `mainAxisSize`
+
+```dart
+MainAxisSize.max // 占满可用空间（默认）
+MainAxisSize.min // 仅包裹子组件
+```
+
+📌 常见于：
+
+```dart
+Column(
+  mainAxisSize: MainAxisSize.min, // 弹窗 / 自适应高度
+)
+```
+
+---
+
+### 4️⃣ `crossAxisAlignment`
+
+```dart
+start    // 交叉轴起点
+end      // 交叉轴终点
+center   // 居中（默认）
+stretch  // 拉伸填满交叉轴
+baseline // 按文本基线对齐（需要 textBaseline）
+```
+
+⚠️ 使用 `baseline` **必须同时设置**：
+
+```dart
+textBaseline: TextBaseline.alphabetic
+```
+
+---
+
+### 5️⃣ `textDirection`
+
+```dart
+TextDirection.ltr // 从左到右
+TextDirection.rtl // 从右到左
+```
+
+📌 影响：
+
+* `start / end`
+* `spaceBetween` 的左右计算
+
+---
+
+### 6️⃣ `verticalDirection`
+
+```dart
+VerticalDirection.down // 从上到下（默认）
+VerticalDirection.up   // 从下到上
+```
+
+📌 **只在 `Axis.vertical` 时生效**
+
+---
+
+### 7️⃣ `textBaseline`
+
+```dart
+TextBaseline.alphabetic // 英文常用
+TextBaseline.ideographic // 中日韩
+```
+
+📌 **仅用于 `CrossAxisAlignment.baseline`**
+
+---
+
+### 8️⃣ `clipBehavior`
+
+```dart
+Clip.none        // 不裁剪（默认，性能最好）
+Clip.hardEdge    // 直接裁剪
+Clip.antiAlias   // 抗锯齿裁剪
+Clip.antiAliasWithSaveLayer // 高质量但性能最差
+```
+
+📌 Flex **一般不需要裁剪**，除非配合动画或溢出 UI
+
+---
+
+### 9️⃣ `children`
+
+```dart
+List<Widget> // 子组件列表
+```
+
+📌 子组件通常配合：
+
+* `Expanded`
+* `Flexible`
+* `Spacer`
+
+---
+
+## ✅ 一句话总结
+
+> **Flex 是 Row / Column 的底层实现**
+> 你掌握了 Flex 的参数，就等于掌握了 Flutter 布局 70% 的核心。
+
+如果你愿意，下一步我可以帮你：
+
+* ✔ 对照 **RenderFlex 源码**讲布局流程
+* ✔ 画一张 **Flex / Row / Column 关系图**
+* ✔ 用 **实际 UI 场景**反推参数选择（面试级）
+
+你可以直接说：
+👉 **“继续讲 RenderFlex”**

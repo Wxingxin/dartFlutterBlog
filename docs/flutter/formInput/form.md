@@ -279,3 +279,214 @@ FormField<bool>(
 5. **封装类似 React Hook Form 的 Flutter 方案**
 
 你只要选一个方向，我直接给你完整实战方案。
+-----------------------
+下面按 **Flutter 官方 `Form` 组件源码结构** 来列出 **Form 的参数大全**，**不改结构**，并且在**每个参数后直接写中文注释**，方便你 **对照源码 / IDE 跳转学习**。
+
+> 说明
+>
+> * 基于 `flutter/material.dart` 中的 `Form`
+> * 顺序与官方构造函数一致
+> * 注释力求“源码级理解”，不是泛泛而谈
+
+---
+
+## Form 构造函数（源码结构 + 中文注释）
+
+```dart
+const Form({
+  Key? key, // widget 的唯一标识，用于 widget 树更新和 diff
+  required Widget child, // 表单的子组件，通常是 Column / ListView，内部包含多个 FormField
+  bool autovalidate = false, // ⚠️ 已废弃（旧版），是否自动触发校验
+  AutovalidateMode? autovalidateMode, // 自动校验模式（推荐使用，替代 autovalidate）
+  WillPopCallback? onWillPop, // 页面返回（如返回键）时触发，用于拦截表单未保存场景
+  VoidCallback? onChanged, // 表单中任意 FormField 值变化时触发
+}) 
+```
+
+---
+
+## 参数逐个深入解释（源码语义级）
+
+### `Key? key`
+
+```dart
+Key? key // 用于 widget 树的唯一标识，表单重建或 diff 时使用
+```
+
+* 和其他 Widget 的 `key` 含义一致
+* 在 **多个 Form 动态切换** 时有用
+* 常见：`const Form(key: ValueKey('loginForm'))`
+
+---
+
+### `Widget child`
+
+```dart
+required Widget child // 表单内容，内部必须包含 FormField（如 TextFormField）
+```
+
+* **Form 本身不存数据**
+* 真正的表单项是 `FormField` / `TextFormField`
+* Form 通过 `InheritedWidget` 管理子字段状态
+
+---
+
+### `bool autovalidate`（已废弃）
+
+```dart
+bool autovalidate = false // 旧版是否自动校验（Flutter 2.x 后不推荐）
+```
+
+* **已废弃**
+* 不建议再使用
+* 源码中保留是为了兼容旧项目
+
+---
+
+### `AutovalidateMode? autovalidateMode` ⭐⭐⭐
+
+```dart
+AutovalidateMode? autovalidateMode // 表单自动校验触发策略
+```
+
+可选值（非常重要）：
+
+```dart
+enum AutovalidateMode {
+  disabled,         // 不自动校验（默认）
+  always,           // 每次 rebuild 都校验
+  onUserInteraction // 用户交互后才校验（最常用）
+}
+```
+
+**推荐：**
+
+```dart
+autovalidateMode: AutovalidateMode.onUserInteraction
+```
+
+---
+
+### `WillPopCallback? onWillPop`
+
+```dart
+WillPopCallback? onWillPop // 页面返回前回调，可阻止返回
+```
+
+签名：
+
+```dart
+typedef WillPopCallback = Future<bool> Function();
+```
+
+用途：
+
+* 表单未保存时，**阻止返回**
+* 弹窗确认是否放弃填写
+
+示例逻辑（理解用）：
+
+```dart
+onWillPop: () async {
+  return formIsSaved; // false = 阻止返回
+}
+```
+
+---
+
+### `VoidCallback? onChanged`
+
+```dart
+VoidCallback? onChanged // 任意表单字段变化时触发（全局监听）
+```
+
+注意点：
+
+* **不是单个字段变化**
+* 是 **Form 内任何 FormField 调用 didChange() 都会触发**
+* 常用于：
+
+  * 表单是否被修改
+  * 启用 / 禁用提交按钮
+
+---
+
+## Form 相关的“隐藏核心对象”（源码理解必看）
+
+虽然不是参数，但你**学 Form 必须知道这些**
+
+### `FormState`
+
+```dart
+FormState // Form 对应的 State，用于操作整个表单
+```
+
+常用方法：
+
+```dart
+formKey.currentState!.validate(); // 触发所有字段校验
+formKey.currentState!.save();     // 调用所有 FormField.onSaved
+formKey.currentState!.reset();    // 重置所有字段
+```
+
+---
+
+### `GlobalKey<FormState>`
+
+```dart
+final _formKey = GlobalKey<FormState>(); // 用于获取 FormState
+```
+
+Form 几乎 **100% 搭配 GlobalKey 使用**
+
+---
+
+## 官方源码级使用骨架（对照理解）
+
+```dart
+final _formKey = GlobalKey<FormState>();
+
+Form(
+  key: _formKey,
+  autovalidateMode: AutovalidateMode.onUserInteraction,
+  onChanged: () {
+    // 任意字段变化
+  },
+  onWillPop: () async {
+    // 是否允许返回
+    return true;
+  },
+  child: Column(
+    children: [
+      TextFormField(
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return '不能为空';
+          }
+          return null;
+        },
+      ),
+    ],
+  ),
+);
+```
+
+---
+
+## 一句话总结（面试 / 架构级）
+
+> **Form 本质是一个“字段状态管理容器”**
+>
+> * 自己不存数据
+> * 统一管理校验、保存、重置
+> * 通过 `InheritedWidget + FormState` 协调子字段
+
+---
+
+如果你愿意，下一步我可以帮你整理：
+
+* `FormField<T>` 参数大全（比 Form 更重要）
+* `TextFormField` 参数 vs `TextField` 对照表
+* **企业级表单封装套路（Flutter 项目必会）**
+
+你直接说要哪一个。

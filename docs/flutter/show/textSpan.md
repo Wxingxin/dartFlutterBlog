@@ -383,3 +383,225 @@ Text.rich(
 * 可选点击回调
 * recognizer 生命周期安全
 * 性能更稳（避免重复创建）
+---------------
+下面是 **Flutter `TextSpan` 构造函数参数大全**，**严格保持源码结构顺序**，**每个参数后直接写中文注释**，不做额外封装，方便你 **对照 Flutter 源码 / IDE 跳转学习**。
+
+> 对应源码位置：`painting/text_span.dart`
+
+---
+
+```dart
+const TextSpan({
+  this.text,                 // 当前文本内容（字符串）
+  this.children,             // 子 TextSpan 列表（用于富文本嵌套）
+  this.style,                // 文本样式（TextStyle）
+  this.recognizer,           // 手势识别器（如点击、长按）
+  this.mouseCursor,          // 鼠标悬浮时的光标样式（Web / Desktop）
+  this.onEnter,              // 鼠标进入时回调（Web / Desktop）
+  this.onExit,               // 鼠标离开时回调（Web / Desktop）
+  this.semanticsLabel,       // 语义标签（无障碍/读屏文本）
+  this.locale,               // 文本语言环境（影响断行/排版）
+  this.spellOut,             // 是否逐字读出（无障碍）
+});
+```
+
+---
+
+## 一、核心必学参数（90% 用到）
+
+### `text`
+
+```dart
+this.text, // 当前 TextSpan 显示的文字内容
+```
+
+* 只影响当前 TextSpan
+* **不能换行布局，只是文字**
+* 如果只有一个 TextSpan，可以直接放在 Text.rich
+
+---
+
+### `style`
+
+```dart
+this.style, // 当前文本样式（颜色、字体、大小等）
+```
+
+* 类型：`TextStyle`
+* 会 **向 children 继承**
+* 常见配置：
+
+  * color
+  * fontSize
+  * fontWeight
+  * decoration
+
+---
+
+### `children`
+
+```dart
+this.children, // 子 TextSpan，用于富文本嵌套
+```
+
+* 用于实现 **不同样式混排**
+* 子 TextSpan 会 **继承父级 style**
+* 可以无限嵌套
+
+---
+
+## 二、交互相关参数（进阶必学）
+
+### `recognizer`
+
+```dart
+this.recognizer, // 手势识别器（如 TapGestureRecognizer）
+```
+
+* 用于实现 **文本点击**
+* 常配合：
+
+  * `TapGestureRecognizer`
+* ⚠️ 需要手动 dispose（在 StatefulWidget 中）
+
+---
+
+### `mouseCursor`
+
+```dart
+this.mouseCursor, // 鼠标悬浮光标样式（Web / Desktop）
+```
+
+* Web / 桌面端有效
+* 常用：
+
+  * `SystemMouseCursors.click`
+  * `SystemMouseCursors.text`
+
+---
+
+### `onEnter`
+
+```dart
+this.onEnter, // 鼠标进入 TextSpan 区域回调
+```
+
+* Web / Desktop
+* 可用于 hover 效果
+
+---
+
+### `onExit`
+
+```dart
+this.onExit, // 鼠标离开 TextSpan 区域回调
+```
+
+---
+
+## 三、无障碍 & 国际化（了解即可）
+
+### `semanticsLabel`
+
+```dart
+this.semanticsLabel, // 读屏时使用的文本（替代 text）
+```
+
+* 用于：
+
+  * 屏幕阅读器
+  * 无障碍优化
+* 不影响视觉展示
+
+---
+
+### `locale`
+
+```dart
+this.locale, // 文本语言环境（影响断词、排版规则）
+```
+
+* 影响：
+
+  * 阿拉伯语
+  * 日文、中文断行
+* 一般不手动设置
+
+---
+
+### `spellOut`
+
+```dart
+this.spellOut, // 是否逐字朗读（无障碍）
+```
+
+* 例如验证码、ID
+* 读屏器会逐字念出
+
+---
+
+## 四、完整使用示例（对照理解）
+
+```dart
+Text.rich(
+  TextSpan(
+    text: '我已阅读并同意',
+    style: TextStyle(color: Colors.black),
+    children: [
+      TextSpan(
+        text: '《用户协议》',
+        style: TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            print('点击协议');
+          },
+        mouseCursor: SystemMouseCursors.click,
+      ),
+    ],
+  ),
+);
+```
+
+---
+
+## 五、TextSpan 和相关类关系（非常重要）
+
+```text
+Text.rich
+  └── TextSpan（纯文本）
+        ├── TextStyle
+        ├── GestureRecognizer
+        └── children（递归）
+```
+
+⚠️ 注意：
+
+* `TextSpan` **不是 Widget**
+* 不能单独使用
+* 只能放在：
+
+  * Text.rich
+  * RichText
+
+---
+
+## 六、源码学习建议（给你方向）
+
+你现在可以重点看这几个源码文件：
+
+1️⃣ `painting/text_span.dart`
+2️⃣ `widgets/text.dart`
+3️⃣ `rendering/paragraph.dart`
+
+---
+
+如果你愿意，下一步我可以帮你：
+
+* ✅ 对比 **Text / RichText / Text.rich / TextSpan**
+* ✅ 给你一份 **富文本常见业务场景模板**
+* ✅ 讲清楚 **TextSpan 为什么不是 Widget（面试高频）**
+
+你想继续哪一个？
