@@ -13,7 +13,17 @@
 | hashCode （Object）   | 哈希值           | int                      |
 | runtimeType（Object） | 运行时类型       | Type                     |
 
-#### 1️⃣ `length`
+#### 1️⃣ `length` 
+
+```dart
+//dynamic 是比较常见的
+Map<String, dynamic> myMap = {
+  "name":"wei gao",
+  "age": 22,
+  "registered": true,
+}
+
+```
 
 ```dart
 Map<String, int> map = {'a': 1, 'b': 2};
@@ -176,8 +186,8 @@ for (var entry in map.entries) {
 | 分类 | 方法                           |
 | ---- | ------------------------------ |
 | 增   | `putIfAbsent` `addAll`         |
-| 改   | `update` `updateAll`           |
 | 删   | `remove` `removeWhere` `clear` |
+| 改   | `update` `updateAll`           |
 | 查   | `containsKey` `containsValue`  |
 | 取   | `[]` `[]=`                     |
 | 遍历 | `forEach`                      |
@@ -333,7 +343,6 @@ map.forEach((key, value) {
 | map.entries.map(...)       | key + value | ❌         |
 | map.entries.where(...)     | key + value | ❌         |
 
-
 #### `entries + for-in`（强烈推荐）
 
 ```dart
@@ -342,14 +351,13 @@ for (final entry in map.entries) {
 }
 ```
 
- 知识点
+知识点
 
-* 同时拿 **key + value**
-* 支持 `break / continue`
-* 可读性最好、性能也很好
+- 同时拿 **key + value**
+- 支持 `break / continue`
+- 可读性最好、性能也很好
 
 👉 **95% 的业务遍历就用它**
-
 
 #### 1️⃣ 遍历 `keys`
 
@@ -359,10 +367,8 @@ for (final k in map.keys) {
 }
 ```
 
-* 只关心 key
-* `keys` 是 `Iterable`（不是 List）
-
-
+- 只关心 key
+- `keys` 是 `Iterable`（不是 List）
 
 #### 2️⃣ 遍历 `values`
 
@@ -372,8 +378,8 @@ for (final v in map.values) {
 }
 ```
 
-* 只关心 value
-* 顺序与插入顺序一致
+- 只关心 value
+- 顺序与插入顺序一致
 
 #### `while + iterator`（了解即可）
 
@@ -385,9 +391,8 @@ while (it.moveNext()) {
 }
 ```
 
-* 最底层方式
-* 几乎不用（for-in 更清晰）
-
+- 最底层方式
+- 几乎不用（for-in 更清晰）
 
 #### `forEach`（⚠️ 易被滥用）
 
@@ -397,18 +402,17 @@ map.forEach((key, value) {
 });
 ```
 
- 必知要点
+必知要点
 
-* ❌ **不能 `break / continue`**
-* ❌ 遍历时 **不能修改 Map 结构**
-* 有回调闭包开销（通常不大）
+- ❌ **不能 `break / continue`**
+- ❌ 遍历时 **不能修改 Map 结构**
+- 有回调闭包开销（通常不大）
 
- 适合场景
+适合场景
 
 ```dart
 map.forEach(print); // 纯打印
 ```
-
 
 #### 1️⃣ `entries.map`（遍历 + 转换）
 
@@ -418,10 +422,8 @@ final list = map.entries.map((e) {
 }).toList();
 ```
 
-* 返回 `Iterable`
-* **需要 `toList()` 才落地**
-
-
+- 返回 `Iterable`
+- **需要 `toList()` 才落地**
 
 #### 2️⃣ `entries.where`（遍历 + 过滤）
 
@@ -511,7 +513,6 @@ map['b'] = 2; // ❌
 
 - `final`：引用不可变
 - `const`：内容不可变
-
 
 # 七、Map 拷贝（⚠️ Flutter 大坑）
 

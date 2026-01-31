@@ -1,15 +1,15 @@
-Future<String> fetchUser() async {
-  await Future.delayed(Duration(seconds: 2));
-  return '张三';
+void main() {
+  final user = User(firstName: "wei", lastName: 'gao');
+  user.getFullName();
+  user.fullName;
 }
 
-Future<void> main() async {
-  try {
-    final user = await fetchUser();
-    print(user);
-  } catch (e) {
-    print('失败');
-  } finally {
-    print('结束');
-  }
+class User {
+  final String firstName;
+  final String lastName;
+
+  User({required this.firstName, required this.lastName});
+
+  String getFullName() => '$firstName $lastName';
+  String get fullName => '$firstName $lastName';
 }
