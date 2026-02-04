@@ -38,18 +38,7 @@ Padding(
 )
 ```
 
-📌 效果：
 
-* Text 四周多出 16 的空间
-* Padding 自身变大
-
-![Image](https://i.sstatic.net/ckmgC.png)
-
-![Image](https://strapi.dhiwise.com/uploads/flutter_padding_vs_margin_OG_Image_efe027d2db.png)
-
-![Image](https://cdn.hashnode.com/res/hashnode/image/upload/v1654037683402/LLJHGFpk6.png)
-
----
 
 ## 四、Padding 的构造函数 & 属性大全
 

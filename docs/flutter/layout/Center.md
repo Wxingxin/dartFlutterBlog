@@ -1,6 +1,4 @@
-下面给你一份**Flutter 组件 `Center` 的「知识点大全 + 属性大全 + 对比 + 实战建议」**，我会把它讲得**非常透**，而且和你前面学的 **Align** 无缝衔接，方便你整理成组件笔记 👍
 
----
 
 ## 一、Center 是干什么的？（一句话本质）
 
@@ -273,19 +271,7 @@ Center(
 
 > **Center = Align.center 的快捷写法，只负责一件事：居中**
 
----
 
-如果你愿意，下一步我可以帮你继续系统整理：
-
-* 🔥 `Center / Align / Padding / SizedBox` 四件套对比表
-* 🔥 Flutter **布局组件完整学习路线**
-* 🔥 帮你整理成 **Rspress / MDX 可直接用的组件文档**
-
-你是打算**系统补布局基础**，还是**边做项目边查组件用法**？我可以按你的目标继续带你走 👊
------------------------------
-下面是 **Flutter `Center` 组件的参数大全**，**严格保持 Flutter SDK 源码中的构造函数结构**，**不改结构**，**仅在每个参数后直接追加中文注释**，方便你 **逐行对照源码学习（Align 的语法糖）**。
-
----
 
 ## Center 构造函数（源码结构）
 
@@ -297,8 +283,6 @@ const Center({
   this.child,           // 居中的子组件
 })
 ```
-
----
 
 ## 参数逐项说明（源码级理解）
 
@@ -393,13 +377,3 @@ Align(
 * 等价于 `Align(alignment: center)`
 * 比 `IntrinsicWidth / IntrinsicHeight` **性能更好**
 
----
-
-如果你下一步还想继续，我可以直接帮你：
-
-* ✅ `FractionallySizedBox` 参数大全（对比 widthFactor）
-* ✅ `SizedBox / ConstrainedBox / Align` 布局差异
-* ✅ RenderAligningShiftedBox 的 layout 源码流程
-* ✅ Flutter 常见居中布局速查表
-
-你直接说：**“继续下一个布局组件”** 或 **“看 RenderObject”** 即可。
