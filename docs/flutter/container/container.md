@@ -1,7 +1,3 @@
-下面我给你一份**Flutter 中 `Container` 的【属性大全 + 配置说明 + 实战建议】**。
-这是 **Flutter UI 基础中的核心组件之一**，你一定要吃透。
-
----
 
 # 一、Container 是什么（一句话定位）
 
@@ -17,23 +13,292 @@
 # 二、Container 构造函数（总览）
 
 ```dart
-Container({
-  Key? key,
-  AlignmentGeometry? alignment,
-  EdgeInsetsGeometry? padding,
-  Color? color,
-  Decoration? decoration,
-  Decoration? foregroundDecoration,
-  double? width,
-  double? height,
-  BoxConstraints? constraints,
-  EdgeInsetsGeometry? margin,
-  Matrix4? transform,
-  AlignmentGeometry? transformAlignment,
-  Widget? child,
-  Clip clipBehavior = Clip.none,
+const Container({
+  Key? key,                               // widget 的唯一标识，用于 element 树更新
+  AlignmentGeometry? alignment,           // 子组件对齐方式（Alignment / AlignmentDirectional）
+  EdgeInsetsGeometry? padding,            // 内边距（padding）
+  Color? color,                           // 背景颜色（与 decoration 不能同时存在）
+  Decoration? decoration,                 // 装饰（背景、圆角、边框、阴影等）
+  Decoration? foregroundDecoration,       // 前景装饰（绘制在 child 之上）
+  double? width,                          // 固定宽度
+  double? height,                         // 固定高度
+  BoxConstraints? constraints,            // 约束（min/max width/height）
+  EdgeInsetsGeometry? margin,             // 外边距（margin）
+  Matrix4? transform,                    // 变换矩阵（平移 / 缩放 / 旋转）
+  AlignmentGeometry? transformAlignment,  // transform 的对齐基准点
+  Widget? child,                          // 子组件
+  Clip clipBehavior = Clip.none,           // 裁剪行为（是否裁剪子组件）
 })
+
 ```
+
+下面我**严格按你给出的 `Container` 构造函数参数顺序**，逐一说明两件事：
+
+1️⃣ **默认值是什么**
+2️⃣ **它可以使用什么值（string / num / 还是固定类型或枚举）**
+
+> 先给结论：
+> **`Container` 是强类型 Widget，大部分参数只能用 Flutter 规定的类或枚举，不能随便用 string。**
+
+---
+
+## 一、参数默认值 & 可用值（逐项对照源码）
+
+---
+
+### 1️⃣ `key`
+
+```dart
+Key? key
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `Key`
+  * `ValueKey<T>`
+  * `ObjectKey`
+  * `UniqueKey`
+
+❌ 不能直接用 `String / int`
+✅ 正确写法：
+
+```dart
+key: ValueKey('container-1')
+```
+
+---
+
+### 2️⃣ `alignment`
+
+```dart
+AlignmentGeometry? alignment
+```
+
+* **默认值**：`null`
+* **可用值（类）**
+
+  * `Alignment.center`
+  * `Alignment.topLeft`
+  * `Alignment.bottomRight`
+  * `AlignmentDirectional.centerStart` 等
+
+📌 只在 `child != null` 时生效
+❌ 不能用 string / num
+
+---
+
+### 3️⃣ `padding`
+
+```dart
+EdgeInsetsGeometry? padding
+```
+
+* **默认值**：`null`
+* **可用值（类）**
+
+```dart
+EdgeInsets.all(8)
+EdgeInsets.symmetric(horizontal: 16)
+EdgeInsets.only(top: 10)
+```
+
+❌ 不能写 `padding: 8`
+
+---
+
+### 4️⃣ `color`
+
+```dart
+Color? color
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `Colors.red`
+  * `Color(0xFF000000)`
+
+❌ 不能用 `'red'`
+⚠️ **不能与 `decoration` 同时使用（源码断言）**
+
+---
+
+### 5️⃣ `decoration`
+
+```dart
+Decoration? decoration
+```
+
+* **默认值**：`null`
+* **常用值**
+
+  * `BoxDecoration(...)`
+  * `ShapeDecoration(...)`
+
+📌 背景色 / 圆角 / 边框 / 阴影都在这里
+❌ 不能是 string / num
+
+---
+
+### 6️⃣ `foregroundDecoration`
+
+```dart
+Decoration? foregroundDecoration
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `BoxDecoration(...)`
+
+📌 绘制在 `child` **上面**（遮罩、蒙层）
+❌ 不能是基础类型
+
+---
+
+### 7️⃣ `width`
+
+```dart
+double? width
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `double`（如 `100`、`200.5`）
+
+✅ 可用 num（会自动转 double）
+❌ 不能用 string
+
+---
+
+### 8️⃣ `height`
+
+```dart
+double? height
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `double`
+
+同 `width`
+
+---
+
+### 9️⃣ `constraints`
+
+```dart
+BoxConstraints? constraints
+```
+
+* **默认值**：`null`
+* **可用值（类）**
+
+```dart
+BoxConstraints(
+  minWidth: 100,
+  maxWidth: 200,
+)
+
+BoxConstraints.tightFor(width: 100, height: 50)
+```
+
+📌 `width / height` 本质也是 constraints 的语法糖
+❌ 不能用 string
+
+---
+
+### 🔟 `margin`
+
+```dart
+EdgeInsetsGeometry? margin
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `EdgeInsets.all(...)`
+  * `EdgeInsets.symmetric(...)`
+
+❌ 不能写 `margin: 10`
+
+---
+
+### 1️⃣1️⃣ `transform`
+
+```dart
+Matrix4? transform
+```
+
+* **默认值**：`null`
+* **可用值（类）**
+
+```dart
+Matrix4.identity()
+Matrix4.translationValues(10, 0, 0)
+Matrix4.rotationZ(0.5)
+```
+
+📌 只影响绘制，不参与布局
+❌ 不能用 string / num
+
+---
+
+### 1️⃣2️⃣ `transformAlignment`
+
+```dart
+AlignmentGeometry? transformAlignment
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * `Alignment.center`
+  * `Alignment.topLeft` 等
+
+📌 transform 的基准点
+❌ 不能是基础类型
+
+---
+
+### 1️⃣3️⃣ `child`
+
+```dart
+Widget? child
+```
+
+* **默认值**：`null`
+* **可用值**
+
+  * 任意 `Widget`
+
+❌ 不能是 string / num
+（`Text('xxx')` 才是 Widget）
+
+---
+
+### 1️⃣4️⃣ `clipBehavior`
+
+```dart
+Clip clipBehavior = Clip.none
+```
+
+* **默认值**：`Clip.none`
+* **可用值（枚举）**
+
+```dart
+Clip.none
+Clip.hardEdge
+Clip.antiAlias
+Clip.antiAliasWithSaveLayer
+```
+
+📌 只有有圆角 / 前景装饰时才有意义
+
+---
 
 ---
 
